@@ -1,12 +1,12 @@
 package cs.tcd.ie;
 
-import edu.stanford.nlp.util.Triple;
+//import edu.stanford.nlp.util.Triple;
 import java.util.ArrayList;
 
 public class RoutingTable {
 	
 	private String routerName;
-	private ArrayList<Triple<String, Integer, String>> distanceVectors;
+	private ArrayList<RoutingRow> distanceVectors;
 	private Router router;
 	
 	/*
@@ -20,9 +20,9 @@ public class RoutingTable {
 	public RoutingTable(Router router, ArrayList<User> users) {
 		this.router = router;
 		this.routerName = router.getName();
-		distanceVectors = new ArrayList<Triple<String, Integer, String>>();
+		distanceVectors = new ArrayList<RoutingRow>();
 		for(int i = 0; i < users.size(); i++) {
-			distanceVectors.add(new Triple<String, Integer, String>(users.get(0).getName(), 0, routerName));
+			distanceVectors.add(new RoutingRow(users.get(i).getName(), null, null));
 		}
 	}
 	
