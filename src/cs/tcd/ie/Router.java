@@ -31,8 +31,8 @@ public class Router extends Node{
 	 * Recieves a Packet, and directs to the correct user
 	 */
 	@Override
-	public void onReceipt(DatagramPacket packet) {
-		// TODO Auto-generated method stub
+	public synchronized void onReceipt(DatagramPacket packet) {
+		table.updateRoutingTable(new Message(packet.getData().toString()));
 	}
 	
 	/*

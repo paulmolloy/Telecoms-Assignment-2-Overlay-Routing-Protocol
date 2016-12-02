@@ -27,16 +27,9 @@ public class RoutingTable {
 	}
 	
 	/*
-	 * Add the initial Router that Are beside the 
-	 */
-	public void addConectedRouters(Router router) {
-		
-	}
-	
-	/*
 	 * Update the Routing Table with a Message that is recieved.
 	 */
-	public void updateRouteingTable(Message message) {
+	public void updateRoutingTable(Message message) {
 		
 	}
 	

@@ -1,44 +1,43 @@
 package cs.tcd.ie;
-
+	
 public class Message {
 	
 	
 	/*
 	 * Message is used to construct and deconstruct the packets that are sent to and from
-	 * each router. They posses getter and setter methods.
+	 * each router. They possess getter and setter methods.
 	 */
 	
 	private String message;
+	private String[] information;
 	
-	
-	public void construct(String message) {
+	public Message(String message) {
 		this.message = message;
-	}
-	
-	public void deconstruct() {
-		
+		information = message.split(",");
 	}
 	
 	public String getRouterFrom() {
-		
+		return information[0];
 	}
 	
-	public double position() {
-		
+	public Double getDistance() {
+		return Double.parseDouble(information[1]);
 	}
 	
 	public String getForwardedRouter() {
-		
+		return information[2];
 	}
 	
-	public double getDistanceFromRouterToForwardedRouter() {
-		
+	public Double getDistanceFromRouterToForwardedRouter() {
+		return Double.parseDouble(information[3]);
 	}
 	
 	public String getUsersOfRouter() {
-		
+		return information[4];
 	}
-	
-	
+
+	public byte[] getBytes() {
+		return message.getBytes();
+	}
 	
 }
