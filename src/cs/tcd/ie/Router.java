@@ -6,20 +6,26 @@ import java.util.ArrayList;
 
 public class Router extends Node{
 
-	ArrayList<Router> listOfRouters;
-	RoutingTable table;
+	private ArrayList<Router> listOfRouters;
+	private RoutingTable table;
 	private int x, y;
 	private String routerName;
+	private int port;
 	
 	
+
+
 	public Router(int x, int y, ArrayList<User> users, String routerName, int port) {
 		listOfRouters  = new ArrayList<Router>();
 		table = new RoutingTable(this, users);
-		this.x = x;
-		this.y = y;
-		this.routerName = routerName;
+		this.setX(x);
+		this.setY(y);
+		this.setRouterName(routerName);
+		
 	}
 	
+
+
 	/*
 	 * Add the routers that are connected to this router in the network 
 	 */
@@ -61,6 +67,51 @@ public class Router extends Node{
 	
 	public int getyPos() {
 		return y;
+	}
+	public ArrayList<Router> getListOfRouters() {
+		return listOfRouters;
+	}
+
+	public void setListOfRouters(ArrayList<Router> listOfRouters) {
+		this.listOfRouters = listOfRouters;
+	}
+
+	public RoutingTable getTable() {
+		return table;
+	}
+
+	public void setTable(RoutingTable table) {
+		this.table = table;
+	}
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public String getRouterName() {
+		return routerName;
+	}
+
+	public void setRouterName(String routerName) {
+		this.routerName = routerName;
 	}
 
 }
