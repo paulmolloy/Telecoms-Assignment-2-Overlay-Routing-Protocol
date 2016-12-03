@@ -41,7 +41,7 @@ public class RoutingTable {
 		int x = router.getxPos();
 		int y = router.getyPos();
 		
-		double distFromRouterAToB = Math.sqrt(Math.pow((x - xPos), 2) + Math.pow((y - yPos), 2));
+		Double distFromRouterAToB = Math.sqrt(Math.pow((x - xPos), 2) + Math.pow((y - yPos), 2));
 		return (newDistance + distFromRouterAToB);
 	}
 	

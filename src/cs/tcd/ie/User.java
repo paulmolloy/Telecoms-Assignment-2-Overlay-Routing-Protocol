@@ -12,8 +12,4 @@ public class User {
 		return userName;
 	}
 	
-	public void sendMessage() {
-		
-	}
-	
 }

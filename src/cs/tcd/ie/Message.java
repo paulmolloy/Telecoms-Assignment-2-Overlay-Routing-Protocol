@@ -16,24 +16,40 @@ public class Message {
 		information = message.split(",");
 	}
 	
-	public String getRouterFrom() {
+	public String getType() {
 		return information[0];
 	}
 	
+	public String getRouterFrom() {
+		return information[1];
+	}
+	
 	public Double getDistance() {
-		return Double.parseDouble(information[1]);
+		return Double.parseDouble(information[2]);
 	}
 	
 	public String getForwardedRouter() {
-		return information[2];
+		return information[3];
 	}
 	
 	public Double getDistanceFromRouterToForwardedRouter() {
-		return Double.parseDouble(information[3]);
+		return Double.parseDouble(information[4]);
 	}
 	
 	public String getUsersOfRouter() {
-		return information[4];
+		return information[5];
+	}
+	
+	public String getUserSentFrom() {
+		return information[1];
+	}
+	
+	public String getRouterDestination() {
+		return information[2];
+	}
+	
+	public String getMessage() {
+		return information[3];
 	}
 
 	public byte[] getBytes() {

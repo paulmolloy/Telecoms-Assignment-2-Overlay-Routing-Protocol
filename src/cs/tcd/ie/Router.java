@@ -12,7 +12,7 @@ public class Router extends Node{
 	private String routerName;
 	
 	
-	public Router(int x, int y, ArrayList<User> users, String routerName) {
+	public Router(int x, int y, ArrayList<User> users, String routerName, int port) {
 		listOfRouters  = new ArrayList<Router>();
 		table = new RoutingTable(this, users);
 		this.x = x;
@@ -36,10 +36,19 @@ public class Router extends Node{
 	}
 	
 	/*
+	 * Sends normal messages from router A to B.
+	 */
+	@Override
+	public synchronized void sendMessage(String message) {
+		
+	}
+	
+	/*
 	 * Sends the distance vectors of the routers from the routing table
 	 */
+	@Override
 	public void ping() {
-		// add pinging method
+		
 	}
 	
 	public String getName() {
@@ -53,5 +62,5 @@ public class Router extends Node{
 	public int getyPos() {
 		return y;
 	}
-	
+
 }
