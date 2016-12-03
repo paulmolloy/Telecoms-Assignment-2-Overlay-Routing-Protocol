@@ -3,7 +3,7 @@ package cs.tcd.ie;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class client {
+public class Client {
 	
 	public static void client(String[] args) {
 		
