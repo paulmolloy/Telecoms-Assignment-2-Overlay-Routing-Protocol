@@ -17,7 +17,7 @@ public class RoutingTable {
 	 *  The third String is the name of the router.
 	 */
 	
-	public RoutingTable(Router router, ArrayList<User> users, String routerName) {
+	public RoutingTable(Router router, ArrayList<User> users) {
 		this.router = router;
 		this.routerName = router.getName();
 		distanceVectors = new ArrayList<RoutingRow>();
