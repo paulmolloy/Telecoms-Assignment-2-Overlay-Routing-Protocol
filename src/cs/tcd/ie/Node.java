@@ -21,8 +21,7 @@ public abstract class Node {
 	
 	
 	public abstract void onReceipt(DatagramPacket packet);
-	public abstract void sendMessage(String  message);
-	public abstract void sendMessage(String  message, int port);
+	public abstract void sendMessage(String user, String  message);
 	public abstract void ping();
 	
 	/**

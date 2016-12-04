@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import tcdIO.Terminal;
 
-
 public class Router extends Node{
 
 	private ArrayList<Router> listOfRouters;
@@ -17,15 +16,8 @@ public class Router extends Node{
 	private int x, y;
 	private String routerName;
 	private int port;
-	static final int DEFAULT_SRC_PORT = 50000;
-	static final int DEFAULT_DST_PORT = 50001;
 	static final String DEFAULT_DST_NODE = "localhost";	
 	
-	static InetSocketAddress dstAddress=new InetSocketAddress(DEFAULT_DST_NODE, DEFAULT_DST_PORT);
-	
-	
-
-
 	public Router(int x, int y, ArrayList<User> users, String routerName, int port) { 	//possibly add adjacent ports to constuctor
 		listOfRouters  = new ArrayList<Router>();
 		table = new RoutingTable(this, users);
@@ -41,8 +33,6 @@ public class Router extends Node{
 		}
 		
 	}
-	
-
 
 	/*
 	 * Add the routers that are connected to this router in the network 
@@ -63,26 +53,19 @@ public class Router extends Node{
 	/*
 	 * Sends normal messages from router A to B.
 	 */
-	@Override
-	public synchronized void sendMessage(String message) {
-		DatagramPacket packet= null;
-		dstAddress=new InetSocketAddress(DEFAULT_DST_NODE, DEFAULT_DST_PORT);
-		packet= new DatagramPacket(message.getBytes(),message.getBytes().length, dstAddress);
-		try {
-			socket.send(packet);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
 	
 	@Override
-	public void sendMessage(String message, int dstPort) {
-		// TODO Auto-generated method stub
-		DatagramPacket packet= null;
-		dstAddress=new InetSocketAddress(DEFAULT_DST_NODE, dstPort);
-		packet= new DatagramPacket(message.getBytes(),message.getBytes().length, dstAddress);
+	public void sendMessage(String user, String message) {
+		DatagramPacket packet = null;
+		String routerDestination = table.getRouterToSendTo(user);
+		Router routerToSendTo = null;
+		for(Router routerToSend: listOfRouters) {
+			if(routerToSend.getName().equals(routerDestination)) {
+				routerToSendTo = routerToSend;
+			}
+		}
+		InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
+		packet = new DatagramPacket(message.getBytes(),message.getBytes().length, dstAddress);
 		try {
 			socket.send(packet);
 		} catch (IOException e) {
@@ -155,9 +138,5 @@ public class Router extends Node{
 	public void setRouterName(String routerName) {
 		this.routerName = routerName;
 	}
-
-
-
-
 
 }

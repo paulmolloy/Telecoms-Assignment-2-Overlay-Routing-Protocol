@@ -1,6 +1,5 @@
 package cs.tcd.ie;
 
-//import edu.stanford.nlp.util.Triple;
 import java.util.ArrayList;
 
 public class RoutingTable {
@@ -11,10 +10,11 @@ public class RoutingTable {
 	
 	/*
 	 *  The Routing table consists of an ArrayList called distanceVectors.
-	 *  Each distanceVector consits of a triple<String, Integer, String>, where
-	 *  the first String represents the userName on the Router, 
-	 *  the Integer is the distance from the user to the router,
-	 *  The third String is the name of the router.
+	 *  Each distanceVector consists of a RoutingRow<String, String, String, Double>, where
+	 *  The First String represents the userName on the Router, 
+	 *  The Second String is the name of the destination router.
+	 *  The Third String is the router that needs to receive the Message in order for the Message to travel the sortest distance.
+	 *  The Final Double is the distance from the Source Router, to the Destination Router.
 	 */
 	
 	public RoutingTable(Router router, ArrayList<User> users) {
@@ -49,8 +49,9 @@ public class RoutingTable {
 	}
 	
 	/*
-	 * returns true if the distence entered in the last message from A - D is shorter than the last distance from A - D
-	 * If it is shorter, then it becomes the newest shortest distance between A - D
+	 * Returns a Double which indicates the distance from Router A to Router C.
+	 * double Distance is the distance from Router B to Router C.
+	 * int xPos is the x coordinate of Router B, int yPos is the y coordinate of Router B
 	 */
 	public double distanceBetweenRouters(double distance, int xPos, int yPos) {
 		int x = router.getxPos();
@@ -58,6 +59,18 @@ public class RoutingTable {
 		
 		Double distFromRouterAToB = Math.sqrt(Math.pow((x - xPos), 2) + Math.pow((y - yPos), 2));
 		return (distance + distFromRouterAToB);
+	}
+	
+	/*
+	 * Gets the router name of a specific user on the router.
+	 */
+	public String getRouterToSendTo(String user) {
+		for(RoutingRow distanceVector: distanceVectors) {
+			if(distanceVector.getUserName().equals(user)) {
+				return distanceVector.getRouterChoice();
+			}
+		}
+		return null;
 	}
 	
 }
