@@ -24,6 +24,9 @@ public class Message {
 		return information[1];
 	}
 	
+	/*
+	 * Don't think we need the following method..........
+	 */
 	public Double getDistance() {
 		return Double.parseDouble(information[2]);
 	}
@@ -38,6 +41,14 @@ public class Message {
 	
 	public String getUsersOfRouter() {
 		return information[5];
+	}
+	
+	public int getx() {
+		return Integer.parseInt(information[6]);
+	}
+	
+	public int gety() {
+		return Integer.parseInt(information[7]);
 	}
 	
 	public String getUserSentFrom() {

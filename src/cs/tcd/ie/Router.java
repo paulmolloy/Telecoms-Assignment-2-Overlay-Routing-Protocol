@@ -14,7 +14,7 @@ public class Router extends Node{
 	
 	public Router(int x, int y, ArrayList<User> users, String routerName, int port) {
 		listOfRouters  = new ArrayList<Router>();
-		table = new RoutingTable(this, users);
+		table = new RoutingTable(this, users, routerName);
 		this.x = x;
 		this.y = y;
 		this.routerName = routerName;

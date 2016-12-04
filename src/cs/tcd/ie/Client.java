@@ -70,6 +70,8 @@ public class Client {
 		routers.get(6).addConnectedRouter(routers.get(8));	// Connect Router G to B
 		routers.get(7).addConnectedRouter(routers.get(9));	// Connect Router H to B
 		
+		//Graph<Router> graph = new Graph<Router>();
+		
 		routers.get(0).ping();
 		
 		System.out.println("Please enter the users to send a string from and to, followed by a message. Each part should be seperated by a colan, ':'.");
