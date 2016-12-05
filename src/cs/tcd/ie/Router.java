@@ -1,6 +1,8 @@
 package cs.tcd.ie;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -48,7 +50,22 @@ public class Router extends Node{
 	 */
 	@Override
 	public synchronized void onReceipt(DatagramPacket packet) {
-		table.updateRoutingTable(new Message(packet.getData().toString()));
+		int type = checkPacketType(packet);
+		switch(type){
+			case RoutingTable.ROUTING_TABLE_CODE:
+				//what happens when a RoutingTableDatagramPacket is received
+				RoutingTable table = new RoutingTable(packet);
+				break;
+			case Message.MESSAGE_CODE:
+				//what happens when a MessageDatagramPacket is received
+				Message message = new Message(packet);
+				break;
+			default:
+				break;
+			
+		}
+			
+	
 	}
 
 	
@@ -78,6 +95,34 @@ public class Router extends Node{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	/**Checks which type of packet is sent returns its code.
+	 * @param Datagrampacket packet
+	 * @return int packetTypeCode
+	 */
+	private int checkPacketType(DatagramPacket packet){
+		try {
+			
+
+			byte[] data;
+			ByteArrayInputStream bin;
+			ObjectInputStream oin;
+
+			data= packet.getData();  // use packet content as seed for stream
+			bin= new ByteArrayInputStream(data);
+			oin= new ObjectInputStream(bin);
+			
+			int packetType = oin.readInt();  // read type from beginning of packet
+
+			
+			oin.close();
+			bin.close();
+			return packetType;
+
+		}
+		catch(Exception e) {e.printStackTrace();}
+
+		return -1;
 	}
 	
 	/*
