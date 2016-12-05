@@ -11,7 +11,7 @@ import tcdIO.Terminal;
 
 public class Router extends Node{
 
-	private ArrayList<Router> listOfRouters;
+	private ArrayList<Router> listOfRouters; 
 	private RoutingTable table;
 	private int x, y;
 	private String routerName;
@@ -24,6 +24,7 @@ public class Router extends Node{
 		this.setX(x);
 		this.setY(y);
 		this.setRouterName(routerName);
+		this.setPort(port);
 		try {
 			socket= new DatagramSocket(this.getPort());
 			listener.go();
