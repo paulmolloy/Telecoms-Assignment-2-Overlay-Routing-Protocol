@@ -15,13 +15,15 @@ public class Router extends Node{
 	private RoutingTable table;
 	private String routerName;
 	private int port;
+	private ArrayList<User> users;
 	static final String DEFAULT_DST_NODE = "localhost";	
 	
 	public Router(ArrayList<User> users, String routerName, int port) { 	//possibly add adjacent ports to constuctor
 		listOfRouters  = new ArrayList<Router>();
-		table = new RoutingTable(this, users);
+		this.table = new RoutingTable(this);
 		this.setRouterName(routerName);
 		this.setPort(port);
+		this.setUsers(users);
 		try {
 			socket= new DatagramSocket(this.getPort());
 			listener.go();
@@ -31,6 +33,8 @@ public class Router extends Node{
 		}
 		
 	}
+
+
 
 	/*
 	 * Add the routers that are connected to this router in the network 
@@ -119,6 +123,13 @@ public class Router extends Node{
 
 	public void setRouterName(String routerName) {
 		this.routerName = routerName;
+	}
+	private void setUsers(ArrayList<User> users) {
+		this.users = users;
+		
+	}
+	private ArrayList<User> getUsers() {
+		return this.users;
 	}
 
 }

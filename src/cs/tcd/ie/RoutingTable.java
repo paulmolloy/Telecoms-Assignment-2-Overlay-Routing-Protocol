@@ -24,7 +24,7 @@ public class RoutingTable  {
 	 *  The Final int is the number of hops from the Source Router, to the Destination Router.
 	 */
 	
-	public RoutingTable(Router router, ArrayList<User> users) { 
+	public RoutingTable(Router router) { 
 		this.port  = router.getPort();
 		this.routerName = router.getName();
 		distanceVectors = new ArrayList<RoutingRow>();
