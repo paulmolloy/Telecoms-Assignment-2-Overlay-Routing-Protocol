@@ -13,7 +13,7 @@ public class RoutingTable  {
 	private String routerName;
 	private ArrayList<RoutingRow> distanceVectors;
 	private int port;
-	private static final int ROUTING_TABLE_CODE = 1;
+	public static final int ROUTING_TABLE_CODE = 1;
 	
 	/**
 	 *  The Routing table consists of an ArrayList called distanceVectors.
