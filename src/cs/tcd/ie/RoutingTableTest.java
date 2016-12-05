@@ -17,7 +17,7 @@ public class RoutingTableTest {
 		r1Users.add(new User("Pete"));
 
 		
-		Router r1 = new Router(1, 1, r1Users, "Router 1", 50002);
+		Router r1 = new Router(r1Users, "Router 1", 50002);
 		RoutingTable rTable1 = new RoutingTable(r1, r1Users);
 		
 		DatagramPacket packet =rTable1.toDatagramPacket();

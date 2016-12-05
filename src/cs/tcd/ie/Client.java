@@ -13,46 +13,46 @@ public class Client {
 		ArrayList<User> usersA = new ArrayList<User>();
 		usersA.add(new User("Aaron"));
 		usersA.add(new User("Able"));
-		routers.add(new Router(1, 2, usersA, "A", 50000));
+		routers.add(new Router(usersA, "A", 50000));
 		
 		ArrayList<User> usersB = new ArrayList<User>();
 		usersB.add(new User("Ben"));
-		routers.add(new Router(1, 2, usersB, "B", 50001));
+		routers.add(new Router(usersB, "B", 50001));
 		
 		
 		ArrayList<User> usersC = new ArrayList<User>();
 		usersC.add(new User("Carl"));
 		usersC.add(new User("Carla"));
 		usersC.add(new User("Cian"));
-		routers.add(new Router(1, 2, usersC, "C", 50002));
+		routers.add(new Router(usersC, "C", 50002));
 		
 		ArrayList<User> usersD = new ArrayList<User>();
 		usersD.add(new User("Dillon"));
 		usersD.add(new User("Denise"));
-		routers.add(new Router(1, 2, usersD, "D", 50003));
+		routers.add(new Router(usersD, "D", 50003));
 		
 		ArrayList<User> usersE = new ArrayList<User>();
 		usersE.add(new User("Earl"));
 		usersE.add(new User("Emma"));
-		routers.add(new Router(1, 2, usersE, "E", 50004));
+		routers.add(new Router(usersE, "E", 50004));
 		
 		ArrayList<User> usersF = new ArrayList<User>();
 		usersF.add(new User("Fiona"));
-		routers.add(new Router(1, 2, usersF, "F", 50005));
+		routers.add(new Router(usersF, "F", 50005));
 		
 		ArrayList<User> usersG = new ArrayList<User>();
 		usersG.add(new User("Gloria"));
 		usersG.add(new User("Gabrial"));
-		routers.add(new Router(1, 2, usersG, "G", 50006));
+		routers.add(new Router(usersG, "G", 50006));
 		
 		ArrayList<User> usersH = new ArrayList<User>();
 		usersH.add(new User("Harry"));
 		usersH.add(new User("Hellen"));
-		routers.add(new Router(1, 2, usersH, "H", 50007));
+		routers.add(new Router(usersH, "H", 50007));
 		
 		ArrayList<User> usersI = new ArrayList<User>();
 		usersI.add(new User("Ian"));
-		routers.add(new Router(1, 2, usersI, "I", 50008));
+		routers.add(new Router(usersI, "I", 50008));
 
 		size = 9;
 		

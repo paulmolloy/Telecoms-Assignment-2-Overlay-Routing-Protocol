@@ -13,16 +13,13 @@ public class Router extends Node{
 
 	private ArrayList<Router> listOfRouters; 
 	private RoutingTable table;
-	private int x, y;
 	private String routerName;
 	private int port;
 	static final String DEFAULT_DST_NODE = "localhost";	
 	
-	public Router(int x, int y, ArrayList<User> users, String routerName, int port) { 	//possibly add adjacent ports to constuctor
+	public Router(ArrayList<User> users, String routerName, int port) { 	//possibly add adjacent ports to constuctor
 		listOfRouters  = new ArrayList<Router>();
 		table = new RoutingTable(this, users);
-		this.setX(x);
-		this.setY(y);
 		this.setRouterName(routerName);
 		this.setPort(port);
 		try {
@@ -91,13 +88,7 @@ public class Router extends Node{
 		return routerName;
 	}
 	
-	public int getxPos() {
-		return x;
-	}
-	
-	public int getyPos() {
-		return y;
-	}
+
 	public ArrayList<Router> getListOfRouters() {
 		return listOfRouters;
 	}
@@ -120,21 +111,7 @@ public class Router extends Node{
 	public void setPort(int port) {
 		this.port = port;
 	}
-	public int getX() {
-		return x;
-	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
 
 	public String getRouterName() {
 		return routerName;
