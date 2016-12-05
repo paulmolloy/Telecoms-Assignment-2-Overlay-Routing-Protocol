@@ -15,17 +15,21 @@ public class RoutingTableTest {
 		ArrayList<User> r1Users = new ArrayList<User>();
 		r1Users.add(new User("Bob"));
 		r1Users.add(new User("Pete"));
+		int testPort = 50002;
+		String testRName = "Router 1";
 
 		
-		Router r1 = new Router(r1Users, "Router 1", 50002);
+		Router r1 = new Router(r1Users, testRName, testPort);
 		RoutingTable rTable1 = new RoutingTable(r1);
 		
 		DatagramPacket packet =rTable1.toDatagramPacket();
 		RoutingTable table = new RoutingTable(packet);
 		System.out.println("Recived Router: "+table.getRouterName());
 		System.out.println("Recived Port: "+table.getPort());
+		assertEquals("toDatagramPacket failed to convert correctly, incorrect port", testPort,table.getPort());
+		assertEquals("toDatagramPacket failed to convert correctly, incorrect routerName", testRName,table.getRouterName());
 
-		//fail("Not yet implemented");
+
 	}
 
 }
