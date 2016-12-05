@@ -14,16 +14,13 @@ public class RoutingTable {
 	 *  The First String represents the userName on the Router, 
 	 *  The Second String is the name of the destination router.
 	 *  The Third String is the router that needs to receive the Message in order for the Message to travel the sortest distance.
-	 *  The Final Double is the distance from the Source Router, to the Destination Router.
+	 *  The Final int is the number of hops from the Source Router, to the Destination Router.
 	 */
 	
 	public RoutingTable(Router router, ArrayList<User> users) {
 		this.router = router;
 		this.routerName = router.getName();
 		distanceVectors = new ArrayList<RoutingRow>();
-		for(int i = 0; i < users.size(); i++) {
-			distanceVectors.add(new RoutingRow(users.get(i).getName(), null, null, null));
-		}
 	}
 	
 	/*
@@ -31,34 +28,22 @@ public class RoutingTable {
 	 */
 	public void updateRoutingTable(Message message) {
 		boolean updated = false;
-		for(RoutingRow distanceVector: distanceVectors) {
-			if(message.getUserSentFrom().equals(distanceVector.getUserName())) {
-				updated = true;
-				Double currentDistance = distanceVector.getDistance();
-				Double newDistance = distanceBetweenRouters(message.getDistanceFromRouterToForwardedRouter(), message.getx(), message.gety());
-				if(newDistance < currentDistance) {
-					distanceVector.setDistance(newDistance);
-					distanceVector.setRouterChoice(message.getRouterFrom());
+		ArrayList<User> users = message.getUsers();
+		for(User user: users) {
+			for(RoutingRow distanceVector: distanceVectors) {
+				if(user.getName().equals(distanceVector.getUserName())) {
+					int newHops = message.getRouterHops() + 1;
+					if(newHops < distanceVector.getHops()) {
+						distanceVector.setDistance(newHops);
+						distanceVector.setRouterChoice(message.getRouterFrom());
+					}
+					updated = true;
 				}
 			}
+			if(updated == false) {
+				distanceVectors.add(new RoutingRow(user.getName(), message.getRouterConnected(), message.getRouterFrom(), message.getRouterHops()));
+			}
 		}
-		if(updated == false) {
-			Double distance = distanceBetweenRouters(message.getDistance(), message.getx(), message.gety());
-			distanceVectors.add(new RoutingRow(message.getUserSentFrom(), message.getForwardedRouter(), message.getRouterFrom(), distance));
-		}
-	}
-	
-	/*
-	 * Returns a Double which indicates the distance from Router A to Router C.
-	 * double Distance is the distance from Router B to Router C.
-	 * int xPos is the x coordinate of Router B, int yPos is the y coordinate of Router B
-	 */
-	public double distanceBetweenRouters(double distance, int xPos, int yPos) {
-		int x = router.getxPos();
-		int y = router.getyPos();
-		
-		Double distFromRouterAToB = Math.sqrt(Math.pow((x - xPos), 2) + Math.pow((y - yPos), 2));
-		return (distance + distFromRouterAToB);
 	}
 	
 	/*

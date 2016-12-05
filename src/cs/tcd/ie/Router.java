@@ -64,6 +64,10 @@ public class Router extends Node{
 				routerToSendTo = routerToSend;
 			}
 		}
+		
+		/*
+		 * need to change the mesage to include the router that needs to receive the message as well!!!!!!!!!!!!!!
+		 */
 		InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
 		packet = new DatagramPacket(message.getBytes(),message.getBytes().length, dstAddress);
 		try {

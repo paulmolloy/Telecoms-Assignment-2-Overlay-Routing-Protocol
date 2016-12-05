@@ -2,15 +2,15 @@ package cs.tcd.ie;
 
 public class RoutingRow {
 
-	String userName, routerDestination, routerChoice;
-	Double length;
+	String userName, routerDestination, routerIntermediate;
+	int hops;
 	
 	
-	public RoutingRow(String userName, String routerDestination, String routerChoice, Double length) {
+	public RoutingRow(String userName, String routerDestination, String routerIntermediate, int hops) {
 		this.userName = userName;
 		this.routerDestination = routerDestination;
-		this.routerChoice = routerChoice;
-		this.length = length;
+		this.routerIntermediate = routerIntermediate;
+		this.hops = hops;
 	}
 	
 	public String getUserName() {
@@ -22,11 +22,11 @@ public class RoutingRow {
 	}
 	
 	public String getRouterChoice() {
-		return routerChoice;
+		return routerIntermediate;
 	}
 	
-	public Double getDistance() {
-		return length;
+	public int getHops() {
+		return hops;
 	}
 	
 	public void setUserName(String userName) {
@@ -38,11 +38,11 @@ public class RoutingRow {
 	}
 	
 	public void setRouterChoice(String routerChoice) {
-		this.routerChoice = routerChoice;
+		this.routerIntermediate = routerChoice;
 	}
 	
-	public void setDistance(Double distance) {
-		this.length = distance;
+	public void setDistance(int hops) {
+		this.hops = hops;
 	}
 
 }

@@ -1,5 +1,7 @@
 package cs.tcd.ie;
-	
+
+import java.util.ArrayList;
+
 public class Message {
 	
 	
@@ -11,10 +13,18 @@ public class Message {
 	private String message;
 	private String[] information;
 	
+	public Message() {
+		this.message = "";
+	}
+	
 	public Message(String message) {
 		this.message = message;
 		information = message.split(",");
 	}
+	
+	/*
+	 * Getters
+	 */
 	
 	public String getType() {
 		return information[0];
@@ -24,47 +34,62 @@ public class Message {
 		return information[1];
 	}
 	
-	/*
-	 * Don't think we need the following method..........
-	 */
-	public Double getDistance() {
-		return Double.parseDouble(information[2]);
-	}
-	
-	public String getForwardedRouter() {
+	public String getRouterConnected() {
 		return information[3];
 	}
 	
-	public Double getDistanceFromRouterToForwardedRouter() {
-		return Double.parseDouble(information[4]);
+	public int getRouterHops() {
+		return Integer.parseInt(information[4]);
 	}
 	
-	public String getUsersOfRouter() {
-		return information[5];
+	public int getUserSize() {
+		return Integer.parseInt(information[5]);
 	}
 	
-	public int getx() {
-		return Integer.parseInt(information[6]);
+	public ArrayList<User> getUsers() {
+		ArrayList<User> users = new ArrayList<User>();
+		int size = getUserSize();
+		for(int i = 0; i <= size; i++) {
+			users.add(new User(information[6 + i]));
+		}
+		return users;
 	}
 	
-	public int gety() {
-		return Integer.parseInt(information[7]);
-	}
-	
-	public String getUserSentFrom() {
-		return information[1];
-	}
-	
-	public String getRouterDestination() {
-		return information[2];
-	}
-	
-	public String getMessage() {
-		return information[3];
-	}
-
 	public byte[] getBytes() {
 		return message.getBytes();
 	}
 	
+	/*
+	 * Setters
+	 */
+	
+	public void setType(String type) {
+		message += type + ",";
+	}
+	
+	public void setRouterFrom(String routerFrom) {
+		message += routerFrom + ",";
+	}
+	
+	public void setRouterConnected(String routerConnected) {
+		message += routerConnected + ",";
+	}
+	
+	public void setRouterHops(int routerHops) {
+		message += Integer.toString(routerHops) + ",";
+	}
+	
+	public void setUserSize(int size) {
+		message += Integer.toString(size) + ",";
+	}
+	
+	public void setUsers(ArrayList<User> users) {
+		int size = users.size();
+		for(int i = 0; i <= size; i++) {
+			message += users.get(i);
+			if(i != size) {
+				message += ",";
+			}
+		}
+	}
 }
