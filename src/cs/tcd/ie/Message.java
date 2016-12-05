@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Message {
 	
 	
-	/*
+	/**
 	 * Message is used to construct and deconstruct the packets that are sent to and from
 	 * each router. They possess getter and setter methods.
 	 */
@@ -29,10 +29,9 @@ public class Message {
 	}
 	
 	
-	/**Routingtable constructor that turns a DatagramPacket made from a RoutingTable into a RoutingTable
+	/**Message constructor that turns a DatagramPacket made from a Message into a Message
 	 * @param packet
 	 */
-	@SuppressWarnings("unchecked")
 	public Message (DatagramPacket packet) {
 
 		try {
