@@ -1,14 +1,21 @@
 package cs.tcd.ie;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.DatagramPacket;
 import java.util.ArrayList;
 
-public class RoutingTable {
+public class RoutingTable  {
 	
 	private String routerName;
 	private ArrayList<RoutingRow> distanceVectors;
-	private Router router;
+	private int port;
+	private static final int ROUTING_TABLE_CODE = 1;
 	
-	/*
+	/**
 	 *  The Routing table consists of an ArrayList called distanceVectors.
 	 *  Each distanceVector consists of a RoutingRow<String, String, String, Double>, where
 	 *  The First String represents the userName on the Router, 
@@ -17,11 +24,13 @@ public class RoutingTable {
 	 *  The Final int is the number of hops from the Source Router, to the Destination Router.
 	 */
 	
-	public RoutingTable(Router router, ArrayList<User> users) {
-		this.router = router;
+	public RoutingTable(Router router, ArrayList<User> users) { 
+		this.port  = router.getPort();
 		this.routerName = router.getName();
 		distanceVectors = new ArrayList<RoutingRow>();
 	}
+	
+
 	
 	/*
 	 * Update the Routing Table with a Message that is recieved.
@@ -57,5 +66,108 @@ public class RoutingTable {
 		}
 		return null;
 	}
+	
+
+	
+	/**Routingtable constructor that turns a DatagramPacket made from a RoutingTable into a RoutingTable
+	 * @param packet
+	 */
+	@SuppressWarnings("unchecked")
+	public RoutingTable (DatagramPacket packet) {
+
+		try {
+			
+
+			byte[] data;
+			ByteArrayInputStream bin;
+			ObjectInputStream oin;
+
+			data= packet.getData();  // use packet content as seed for stream
+			bin= new ByteArrayInputStream(data);
+			oin= new ObjectInputStream(bin);
+			
+			int packetType = oin.readInt();  // read type from beginning of packet
+
+			switch(packetType) {   // depending on type create content object 
+			case ROUTING_TABLE_CODE:
+				this.port = oin.readInt();
+				this.routerName = oin.readUTF();
+				this.distanceVectors = (ArrayList<RoutingRow>)oin.readObject();
+
+
+				break;
+			
+			default:
+				this.port  = -1;
+				this.routerName = null;
+				this.distanceVectors = null;
+				break;
+			}
+			oin.close();
+			bin.close();
+
+		}
+		catch(Exception e) {e.printStackTrace();}
+
+	}
+
+	
+	
+	public String getRouterName() {
+		return routerName;
+	}
+
+
+
+	public void setRouterName(String routerName) {
+		this.routerName = routerName;
+	}
+
+
+
+	public int getPort() {
+		return port;
+	}
+
+
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+
+
+	/**Converts a Routing table into a DatagramPacket to be sent
+	 * @return DatagramPacket
+	 */
+	public DatagramPacket toDatagramPacket() {
+		DatagramPacket packet= null;
+
+		try {
+			ByteArrayOutputStream bout;
+			ObjectOutputStream oout;
+			byte[] data;
+			bout= new ByteArrayOutputStream();
+			oout= new ObjectOutputStream(bout);
+			
+			oout.writeInt(ROUTING_TABLE_CODE);
+			oout.writeInt(port);
+			oout.writeUTF(routerName);
+			oout.writeObject(distanceVectors);
+			
+			oout.flush();
+			data= bout.toByteArray(); // convert content to byte array
+
+			packet= new DatagramPacket(data, data.length); // create packet from byte array
+			oout.close();
+			bout.close();
+		}
+		catch(Exception e) {e.printStackTrace();}
+
+		return packet;
+	}
+
+
+	
 	
 }
