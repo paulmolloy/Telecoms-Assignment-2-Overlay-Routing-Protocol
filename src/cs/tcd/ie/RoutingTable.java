@@ -33,7 +33,10 @@ public class RoutingTable  {
 
 	
 	/*
-	 * Update the Routing Table with a Message that is recieved.
+	 * Update the Routing Table with a Message that is received.
+	 * Checks whether new distance is smaller than original. If so
+	 * then distance is updated with new distance taken from message which
+	 * has been received.
 	 */
 	public void updateRoutingTable(Message message) {
 		boolean updated = false;

@@ -130,7 +130,17 @@ public class Router extends Node{
 	 */
 	@Override
 	public void ping() {
-		
+		for(Router routerSendingTo : listOfRouters){
+			InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerSendingTo.getPort());
+			DatagramPacket packet = table.toDatagramPacket();
+			packet.setSocketAddress(dstAddress);
+			try {
+			socket.send(packet);
+			} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+		}
 	}
 	
 	public String getName() {

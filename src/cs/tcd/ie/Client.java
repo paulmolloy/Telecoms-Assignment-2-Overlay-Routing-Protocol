@@ -56,6 +56,7 @@ public class Client {
 
 		size = 9;
 		
+		// Routers connected to one another
 		routers.get(0).addConnectedRouter(routers.get(1));	// Connect Router A to B
 		routers.get(0).addConnectedRouter(routers.get(2));	// Connect Router A to C
 		routers.get(1).addConnectedRouter(routers.get(5));	// Connect Router B to F
