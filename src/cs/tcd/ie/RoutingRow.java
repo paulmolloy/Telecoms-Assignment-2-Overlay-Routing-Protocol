@@ -1,20 +1,22 @@
 package cs.tcd.ie;
 
+import java.util.ArrayList;
+
 public class RoutingRow {
 
-	String userName, routerDestination, routerIntermediate;
-	int hops;
-	
-	
-	public RoutingRow(String userName, String routerDestination, String routerIntermediate, int hops) {
-		this.userName = userName;
+	private String userName, routerDestination, routerIntermediate;
+	private ArrayList<User> users;
+	private int hops;
+
+	public RoutingRow(ArrayList<User> users, String routerDestination, String routerIntermediate, int hops) {
+		this.users = users;
 		this.routerDestination = routerDestination;
 		this.routerIntermediate = routerIntermediate;
 		this.hops = hops;
 	}
-	
-	public String getUserName() {
-		return userName;
+
+	public ArrayList<User> getUsers() {
+		return users;
 	}
 	
 	public String getRouterDestination() {
@@ -28,9 +30,9 @@ public class RoutingRow {
 	public int getHops() {
 		return hops;
 	}
-	
-	public void setUserName(String userName) {
-		this.userName = userName;
+
+	public void setUsers(ArrayList<User> users) {
+		this.users = users;
 	}
 
 	public void setRouterDestination(String routerDestination) {
@@ -41,7 +43,7 @@ public class RoutingRow {
 		this.routerIntermediate = routerChoice;
 	}
 	
-	public void setDistance(int hops) {
+	public void setHops(int hops) {
 		this.hops = hops;
 	}
 

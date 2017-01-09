@@ -35,7 +35,6 @@ public class Message {
 	public Message (DatagramPacket packet) {
 
 		try {
-			
 
 			byte[] data;
 			ByteArrayInputStream bin;
@@ -102,34 +101,17 @@ public class Message {
 	/*
 	 * Getters
 	 */
-	
-	public String getType() {
+
+	public String getUserFrom() {
 		return information[0];
 	}
-	
-	public String getRouterFrom() {
+
+	public String getUserTo() {
 		return information[1];
 	}
-	
-	public String getRouterConnected() {
-		return information[3];
-	}
-	
-	public int getRouterHops() {
-		return Integer.parseInt(information[4]);
-	}
-	
-	public int getUserSize() {
-		return Integer.parseInt(information[5]);
-	}
-	
-	public ArrayList<User> getUsers() {
-		ArrayList<User> users = new ArrayList<User>();
-		int size = getUserSize();
-		for(int i = 0; i <= size; i++) {
-			users.add(new User(information[6 + i]));
-		}
-		return users;
+
+	public String getMessage() {
+		return information[2];
 	}
 	
 	public byte[] getBytes() {
@@ -140,33 +122,15 @@ public class Message {
 	 * Setters
 	 */
 	
-	public void setType(String type) {
-		message += type + ",";
+	public void setUserFrom(String string) {
+		message += string;
 	}
-	
-	public void setRouterFrom(String routerFrom) {
-		message += routerFrom + ",";
+
+	public void setUserTo(String string) {
+		message += string;
 	}
-	
-	public void setRouterConnected(String routerConnected) {
-		message += routerConnected + ",";
-	}
-	
-	public void setRouterHops(int routerHops) {
-		message += Integer.toString(routerHops) + ",";
-	}
-	
-	public void setUserSize(int size) {
-		message += Integer.toString(size) + ",";
-	}
-	
-	public void setUsers(ArrayList<User> users) {
-		int size = users.size();
-		for(int i = 0; i <= size; i++) {
-			message += users.get(i);
-			if(i != size) {
-				message += ",";
-			}
-		}
+
+	public void setMessage(String string) {
+		message += string;
 	}
 }

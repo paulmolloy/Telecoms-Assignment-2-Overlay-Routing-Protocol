@@ -11,16 +11,18 @@ import java.util.ArrayList;
 
 import tcdIO.Terminal;
 
-public class Router extends Node{
+public class Router extends Node {
 
-	private ArrayList<Router> listOfRouters; 
+	private ArrayList<Router> listOfRouters;
 	private RoutingTable table;
 	private String routerName;
 	private int port;
 	private ArrayList<User> users;
-	static final String DEFAULT_DST_NODE = "localhost";	
-	
+	private Terminal terminal;
+	static final String DEFAULT_DST_NODE = "localhost";
+
 	public Router(ArrayList<User> users, String routerName, int port) { 	//possibly add adjacent ports to constuctor
+		this.terminal = new Terminal(routerName);
 		listOfRouters  = new ArrayList<Router>();
 		this.table = new RoutingTable(this);
 		this.setRouterName(routerName);
@@ -33,13 +35,10 @@ public class Router extends Node{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
-
-
 	/*
-	 * Add the routers that are connected to this router in the network 
+	 * Add the routers that are connected to this router in the network
 	 */
 	public void addConnectedRouter(Router router) {
 		listOfRouters.add(router);
@@ -54,56 +53,60 @@ public class Router extends Node{
 		switch(type){
 			case RoutingTable.ROUTING_TABLE_CODE:
 				//what happens when a RoutingTableDatagramPacket is received
-				RoutingTable table = new RoutingTable(packet);
+				table.updateRoutingTable(new RoutingTable(packet));
+				if(RoutingTable.timesToBeUnchaged <= table.getTimesNotChanged()) {
+					// Do Nothing.
+				}	else	{
+					ping();
+				}
 				break;
 			case Message.MESSAGE_CODE:
 				//what happens when a MessageDatagramPacket is received
 				Message message = new Message(packet);
+				sendMessage(message);
 				break;
 			default:
 				break;
-			
 		}
-			
-	
 	}
 
-	
 	/*
 	 * Sends normal messages from router A to B.
 	 */
-	
+
 	@Override
-	public void sendMessage(String user, String message) {
+	public void sendMessage(Message message) {
 		DatagramPacket packet = null;
-		String routerDestination = table.getRouterToSendTo(user);
+		String routerDestination = table.getRouterToSendTo(message.getUserTo());
 		Router routerToSendTo = null;
 		for(Router routerToSend: listOfRouters) {
 			if(routerToSend.getName().equals(routerDestination)) {
 				routerToSendTo = routerToSend;
 			}
 		}
-		
-		/*
-		 * need to change the mesage to include the router that needs to receive the message as well!!!!!!!!!!!!!!
-		 */
-		InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
-		packet = new DatagramPacket(message.getBytes(),message.getBytes().length, dstAddress);
-		try {
-			socket.send(packet);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		if(routerToSendTo == null) {
+			terminal.println("From: " + message.getUserFrom() + ", Message: " + message.getMessage());
+		}	else {
+			/*
+			 * need to change the mesage to include the router that needs to receive the message as well!!!!!!!!!!!!!!
+			 */
+			terminal.println("Message From: " + message.getUserFrom() + ", To: " + message.getUserTo());
+			InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
+			packet = message.toDatagramPacket();
+			try {
+				socket.send(packet);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	/**Checks which type of packet is sent returns its code.
-	 * @param Datagrampacket packet
 	 * @return int packetTypeCode
 	 */
 	private int checkPacketType(DatagramPacket packet){
 		try {
-			
-
 			byte[] data;
 			ByteArrayInputStream bin;
 			ObjectInputStream oin;
@@ -111,20 +114,18 @@ public class Router extends Node{
 			data= packet.getData();  // use packet content as seed for stream
 			bin= new ByteArrayInputStream(data);
 			oin= new ObjectInputStream(bin);
-			
+
 			int packetType = oin.readInt();  // read type from beginning of packet
 
-			
 			oin.close();
 			bin.close();
 			return packetType;
-
 		}
 		catch(Exception e) {e.printStackTrace();}
 
 		return -1;
 	}
-	
+
 	/*
 	 * Sends the distance vectors of the routers from the routing table
 	 */
@@ -135,18 +136,18 @@ public class Router extends Node{
 			DatagramPacket packet = table.toDatagramPacket();
 			packet.setSocketAddress(dstAddress);
 			try {
-			socket.send(packet);
+				socket.send(packet);
 			} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	public String getName() {
 		return routerName;
 	}
-	
+
 
 	public ArrayList<Router> getListOfRouters() {
 		return listOfRouters;
@@ -163,6 +164,7 @@ public class Router extends Node{
 	public void setTable(RoutingTable table) {
 		this.table = table;
 	}
+
 	public int getPort() {
 		return port;
 	}
@@ -179,11 +181,12 @@ public class Router extends Node{
 	public void setRouterName(String routerName) {
 		this.routerName = routerName;
 	}
-	private void setUsers(ArrayList<User> users) {
+
+	public void setUsers(ArrayList<User> users) {
 		this.users = users;
-		
+
 	}
-	private ArrayList<User> getUsers() {
+	public ArrayList<User> getUsers() {
 		return this.users;
 	}
 

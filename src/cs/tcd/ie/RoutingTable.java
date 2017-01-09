@@ -9,7 +9,10 @@ import java.net.DatagramPacket;
 import java.util.ArrayList;
 
 public class RoutingTable  {
-	
+
+	public static int timesToBeUnchaged = 20;
+
+	private int timesTableUnchanged;
 	private String routerName;
 	private ArrayList<RoutingRow> distanceVectors;
 	private int port;
@@ -24,10 +27,12 @@ public class RoutingTable  {
 	 *  The Final int is the number of hops from the Source Router, to the Destination Router.
 	 */
 	
-	public RoutingTable(Router router) { 
-		this.port  = router.getPort();
+	public RoutingTable(Router router) {
+		this.timesTableUnchanged = 0;
+		this.port = router.getPort();
 		this.routerName = router.getName();
 		distanceVectors = new ArrayList<RoutingRow>();
+		distanceVectors.add(new RoutingRow(router.getUsers(), routerName, "-", 0));
 	}
 	
 
@@ -38,38 +43,45 @@ public class RoutingTable  {
 	 * then distance is updated with new distance taken from message which
 	 * has been received.
 	 */
-	public void updateRoutingTable(Message message) {
-		boolean updated = false;
-		ArrayList<User> users = message.getUsers();
-		for(User user: users) {
-			for(RoutingRow distanceVector: distanceVectors) {
-				if(user.getName().equals(distanceVector.getUserName())) {
-					int newHops = message.getRouterHops() + 1;
-					if(newHops < distanceVector.getHops()) {
-						distanceVector.setDistance(newHops);
-						distanceVector.setRouterChoice(message.getRouterFrom());
+	public void updateRoutingTable(RoutingTable table) {
+		boolean changed = false;
+		ArrayList<RoutingRow> distanceVectorsTable = table.getRows();
+		//String tableName = table.getRouterName();
+		for(RoutingRow vector: distanceVectorsTable) {
+			for(RoutingRow vectorOfThisRouterTable: distanceVectors) {
+				if(vector.getRouterDestination().equals(vectorOfThisRouterTable.getRouterDestination())) {
+					int oldHops = vector.getHops(), newHops = vectorOfThisRouterTable.getHops();
+					if ((newHops + 1) < oldHops) {
+						vectorOfThisRouterTable.setRouterChoice(vector.getRouterChoice());
+						vectorOfThisRouterTable.setHops(newHops + 1);
+						changed = true;
 					}
-					updated = true;
 				}
 			}
-			if(updated == false) {
-				distanceVectors.add(new RoutingRow(user.getName(), message.getRouterConnected(), message.getRouterFrom(), message.getRouterHops()));
-			}
+		}
+		if(!changed) {
+			timesTableUnchanged++;
 		}
 	}
 	
 	/*
 	 * Gets the router name of a specific user on the router.
 	 */
-	public String getRouterToSendTo(String user) {
-		for(RoutingRow distanceVector: distanceVectors) {
-			if(distanceVector.getUserName().equals(user)) {
-				return distanceVector.getRouterChoice();
+	public String getRouterToSendTo(String userName) {
+		for (RoutingRow distanceVector : distanceVectors) {
+			ArrayList<User> users = distanceVector.getUsers();
+			for (User user : users) {
+				if (user.getName().equals(userName)) {
+					return distanceVector.getRouterChoice();
+				}
 			}
 		}
 		return null;
 	}
-	
+
+	public ArrayList<RoutingRow> getRows() {
+		return distanceVectors;
+	}
 
 	
 	/**Routingtable constructor that turns a DatagramPacket made from a RoutingTable into a RoutingTable
@@ -79,15 +91,14 @@ public class RoutingTable  {
 	public RoutingTable (DatagramPacket packet) {
 
 		try {
-			
 
 			byte[] data;
 			ByteArrayInputStream bin;
 			ObjectInputStream oin;
 
-			data= packet.getData();  // use packet content as seed for stream
-			bin= new ByteArrayInputStream(data);
-			oin= new ObjectInputStream(bin);
+			data = packet.getData();  // use packet content as seed for stream
+			bin = new ByteArrayInputStream(data);
+			oin = new ObjectInputStream(bin);
 			
 			int packetType = oin.readInt();  // read type from beginning of packet
 
@@ -114,31 +125,25 @@ public class RoutingTable  {
 
 	}
 
-	
-	
+	public int getTimesNotChanged() {
+		return timesTableUnchanged;
+	}
+
 	public String getRouterName() {
 		return routerName;
 	}
-
-
 
 	public void setRouterName(String routerName) {
 		this.routerName = routerName;
 	}
 
-
-
 	public int getPort() {
 		return port;
 	}
 
-
-
 	public void setPort(int port) {
 		this.port = port;
 	}
-
-
 
 	/**Converts a Routing table into a DatagramPacket to be sent
 	 * @return DatagramPacket
@@ -150,8 +155,8 @@ public class RoutingTable  {
 			ByteArrayOutputStream bout;
 			ObjectOutputStream oout;
 			byte[] data;
-			bout= new ByteArrayOutputStream();
-			oout= new ObjectOutputStream(bout);
+			bout = new ByteArrayOutputStream();
+			oout = new ObjectOutputStream(bout);
 			
 			oout.writeInt(ROUTING_TABLE_CODE);
 			oout.writeInt(port);
@@ -159,9 +164,9 @@ public class RoutingTable  {
 			oout.writeObject(distanceVectors);
 			
 			oout.flush();
-			data= bout.toByteArray(); // convert content to byte array
+			data = bout.toByteArray(); // convert content to byte array
 
-			packet= new DatagramPacket(data, data.length); // create packet from byte array
+			packet = new DatagramPacket(data, data.length); // create packet from byte array
 			oout.close();
 			bout.close();
 		}
@@ -170,7 +175,4 @@ public class RoutingTable  {
 		return packet;
 	}
 
-
-	
-	
 }

@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class RouterTest {
-
 	@Test
 	public void testOnReceipt() {
 		fail("Not yet implemented");
@@ -25,5 +24,4 @@ public class RouterTest {
 	public void testAddConnectedRouter() {
 		fail("Not yet implemented");
 	}
-
 }
