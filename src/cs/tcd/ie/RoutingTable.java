@@ -17,7 +17,7 @@ public class RoutingTable  {
 	private ArrayList<RoutingRow> distanceVectors;
 	private int port;
 	public static final int ROUTING_TABLE_CODE = 1;
-	
+
 	/**
 	 *  The Routing table consists of an ArrayList called distanceVectors.
 	 *  Each distanceVector consists of a RoutingRow<String, String, String, Double>, where
@@ -26,7 +26,7 @@ public class RoutingTable  {
 	 *  The Third String is the router that needs to receive the Message in order for the Message to travel the shortest distance.
 	 *  The Final int is the number of hops from the Source Router, to the Destination Router.
 	 */
-	
+
 	public RoutingTable(Router router, String routerName) {
 		this.routerName = routerName;
 		this.timesTableUnchanged = 0;
@@ -35,7 +35,7 @@ public class RoutingTable  {
 		distanceVectors = new ArrayList<RoutingRow>();
 		distanceVectors.add(new RoutingRow(router.getUsers(), routerName, "-", 0));
 	}
-	
+
 	/**Routingtable constructor that turns a DatagramPacket made from a RoutingTable into a RoutingTable
 	 * @param packet
 	 */
@@ -51,18 +51,18 @@ public class RoutingTable  {
 			oin = new ObjectInputStream(bin);
 			int packetType = oin.readInt();  // read type from beginning of packet
 
-			switch(packetType) {   // depending on type create content object 
-			case ROUTING_TABLE_CODE:
-				this.port = oin.readInt();
-				this.routerName = oin.readUTF();
-				this.distanceVectors = (ArrayList<RoutingRow>)oin.readObject();
-				break;
-			
-			default:
-				this.port  = -1;
-				this.routerName = null;
-				this.distanceVectors = null;
-				break;
+			switch(packetType) {   // depending on type create content object
+				case ROUTING_TABLE_CODE:
+					this.port = oin.readInt();
+					this.routerName = oin.readUTF();
+					this.distanceVectors = (ArrayList<RoutingRow>)oin.readObject();
+					break;
+
+				default:
+					this.port  = -1;
+					this.routerName = null;
+					this.distanceVectors = null;
+					break;
 			}
 			oin.close();
 			bin.close();
@@ -71,7 +71,7 @@ public class RoutingTable  {
 		catch(Exception e) {e.printStackTrace();}
 
 	}
-	
+
 	/*
 	 * Update the Routing Table with a Message that is received.
 	 * Checks whether new distance is smaller than original. If so
@@ -103,7 +103,7 @@ public class RoutingTable  {
 			timesTableUnchanged++;
 		}
 	}
-	
+
 	/*
 	 * Gets the router name of a specific user on the router.
 	 */
@@ -155,12 +155,12 @@ public class RoutingTable  {
 			byte[] data;
 			bout = new ByteArrayOutputStream();
 			oout = new ObjectOutputStream(bout);
-			
+
 			oout.writeInt(ROUTING_TABLE_CODE);
 			oout.writeInt(port);
 			oout.writeUTF(routerName);
 			oout.writeObject(distanceVectors);
-			
+
 			oout.flush();
 			data = bout.toByteArray(); // convert content to byte array
 

@@ -13,8 +13,8 @@ public abstract class Node {
 	CountDownLatch latch;
 	
 	Node() {
-		latch= new CountDownLatch(1);
-		listener= new Listener();
+		latch = new CountDownLatch(1);
+		listener = new Listener();
 		listener.setDaemon(true);
 		listener.start();
 	}

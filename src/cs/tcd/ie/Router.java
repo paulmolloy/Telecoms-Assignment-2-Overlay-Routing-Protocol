@@ -110,7 +110,7 @@ public class Router extends Node {
 			}
 		}
 	}
-	
+
 	/**Checks which type of packet is sent returns its code.
 	 * @return int packetTypeCode
 	 */
