@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Client {
-	
-	public static void client(String[] args) {
+
+	public static void main(String[] args) {
 		
 		int size = 0;
 		ArrayList<Router> routers = new ArrayList<Router>();
@@ -66,13 +66,10 @@ public class Client {
 		routers.get(3).addConnectedRouter(routers.get(4));	// Connect Router D to B
 		routers.get(3).addConnectedRouter(routers.get(6));	// Connect Router D to B
 		routers.get(4).addConnectedRouter(routers.get(7));	// Connect Router E to B
-		routers.get(4).addConnectedRouter(routers.get(9));	// Connect Router E to B
+		routers.get(4).addConnectedRouter(routers.get(8));	// Connect Router E to B
 		routers.get(5).addConnectedRouter(routers.get(1));	// Connect Router F to B
-		routers.get(6).addConnectedRouter(routers.get(8));	// Connect Router G to B
-		routers.get(7).addConnectedRouter(routers.get(9));	// Connect Router H to B
-		
-		//Graph<Router> graph = new Graph<Router>();
-		
+		routers.get(7).addConnectedRouter(routers.get(8));	// Connect Router H to B
+
 		routers.get(0).ping();
 		
 		System.out.println("Please enter the users to send a string from and to, followed by a message. Each part should be seperated by a colan, ':'.");

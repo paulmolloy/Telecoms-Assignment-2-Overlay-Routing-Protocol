@@ -26,7 +26,9 @@ public class Router extends Node {
 		listOfRouters  = new ArrayList<Router>();
 		this.table = new RoutingTable(this);
 		this.setRouterName(routerName);
+		table.setRouterName(routerName);
 		this.setPort(port);
+		table.setPort(port);
 		this.setUsers(users);
 		try {
 			socket= new DatagramSocket(this.getPort());
@@ -53,10 +55,12 @@ public class Router extends Node {
 		switch(type){
 			case RoutingTable.ROUTING_TABLE_CODE:
 				//what happens when a RoutingTableDatagramPacket is received
-				table.updateRoutingTable(new RoutingTable(packet));
+				RoutingTable rt = new RoutingTable(packet);
+				table.updateRoutingTable(rt);
 				if(RoutingTable.timesToBeUnchaged <= table.getTimesNotChanged()) {
-					// Do Nothing.
+					// Do Nothing!
 				}	else	{
+					terminal.println("Received ping from " + rt.getRouterName());
 					ping();
 				}
 				break;
@@ -130,18 +134,21 @@ public class Router extends Node {
 	 * Sends the distance vectors of the routers from the routing table
 	 */
 	@Override
-	public void ping() {
+	public synchronized void ping() {
+		DatagramPacket packet = table.toDatagramPacket();
 		for(Router routerSendingTo : listOfRouters){
 			InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerSendingTo.getPort());
-			DatagramPacket packet = table.toDatagramPacket();
 			packet.setSocketAddress(dstAddress);
 			try {
 				socket.send(packet);
+				terminal.println("Sent packetie");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			terminal.println("Finished pinging to " + routerSendingTo.getRouterName());
 		}
+		terminal.println("Finished Pinging!");
 	}
 
 	public String getName() {

@@ -89,9 +89,7 @@ public class RoutingTable  {
 	 */
 	@SuppressWarnings("unchecked")
 	public RoutingTable (DatagramPacket packet) {
-
 		try {
-
 			byte[] data;
 			ByteArrayInputStream bin;
 			ObjectInputStream oin;
@@ -150,7 +148,6 @@ public class RoutingTable  {
 	 */
 	public DatagramPacket toDatagramPacket() {
 		DatagramPacket packet= null;
-
 		try {
 			ByteArrayOutputStream bout;
 			ObjectOutputStream oout;
