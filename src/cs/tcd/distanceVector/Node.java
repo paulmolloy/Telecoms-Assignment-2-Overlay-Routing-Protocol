@@ -1,4 +1,4 @@
-package cs.tcd.ie;
+package cs.tcd.distanceVector;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
