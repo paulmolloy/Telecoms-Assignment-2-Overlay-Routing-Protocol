@@ -1,10 +1,11 @@
 package cs.tcd.ie;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RoutingRow {
+public class RoutingRow implements Serializable {
 
-	private String userName, routerDestination, routerIntermediate;
+	private String routerDestination, routerIntermediate;
 	private ArrayList<User> users;
 	private int hops;
 

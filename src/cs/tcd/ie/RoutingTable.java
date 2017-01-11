@@ -23,11 +23,12 @@ public class RoutingTable  {
 	 *  Each distanceVector consists of a RoutingRow<String, String, String, Double>, where
 	 *  The First String represents the userName on the Router, 
 	 *  The Second String is the name of the destination router.
-	 *  The Third String is the router that needs to receive the Message in order for the Message to travel the sortest distance.
+	 *  The Third String is the router that needs to receive the Message in order for the Message to travel the shortest distance.
 	 *  The Final int is the number of hops from the Source Router, to the Destination Router.
 	 */
 	
-	public RoutingTable(Router router) {
+	public RoutingTable(Router router, String routerName) {
+		this.routerName = routerName;
 		this.timesTableUnchanged = 0;
 		this.port = router.getPort();
 		this.routerName = router.getName();
@@ -35,7 +36,41 @@ public class RoutingTable  {
 		distanceVectors.add(new RoutingRow(router.getUsers(), routerName, "-", 0));
 	}
 	
+	/**Routingtable constructor that turns a DatagramPacket made from a RoutingTable into a RoutingTable
+	 * @param packet
+	 */
+	@SuppressWarnings("unchecked")
+	public RoutingTable(DatagramPacket packet) {
+		try {
+			byte[] data;
+			ByteArrayInputStream bin;
+			ObjectInputStream oin;
 
+			data = packet.getData();  // use packet content as seed for stream
+			bin = new ByteArrayInputStream(data);
+			oin = new ObjectInputStream(bin);
+			int packetType = oin.readInt();  // read type from beginning of packet
+
+			switch(packetType) {   // depending on type create content object 
+			case ROUTING_TABLE_CODE:
+				this.port = oin.readInt();
+				this.routerName = oin.readUTF();
+				this.distanceVectors = (ArrayList<RoutingRow>)oin.readObject();
+				break;
+			
+			default:
+				this.port  = -1;
+				this.routerName = null;
+				this.distanceVectors = null;
+				break;
+			}
+			oin.close();
+			bin.close();
+
+		}
+		catch(Exception e) {e.printStackTrace();}
+
+	}
 	
 	/*
 	 * Update the Routing Table with a Message that is received.
@@ -46,17 +81,22 @@ public class RoutingTable  {
 	public void updateRoutingTable(RoutingTable table) {
 		boolean changed = false;
 		ArrayList<RoutingRow> distanceVectorsTable = table.getRows();
-		//String tableName = table.getRouterName();
 		for(RoutingRow vector: distanceVectorsTable) {
+			boolean vectorFound = false;
 			for(RoutingRow vectorOfThisRouterTable: distanceVectors) {
 				if(vector.getRouterDestination().equals(vectorOfThisRouterTable.getRouterDestination())) {
-					int oldHops = vector.getHops(), newHops = vectorOfThisRouterTable.getHops();
+					vectorFound = true;
+					int newHops = vector.getHops(), oldHops = vectorOfThisRouterTable.getHops();
 					if ((newHops + 1) < oldHops) {
-						vectorOfThisRouterTable.setRouterChoice(vector.getRouterChoice());
+						vectorOfThisRouterTable.setRouterChoice(table.getRouterName());
 						vectorOfThisRouterTable.setHops(newHops + 1);
 						changed = true;
 					}
 				}
+			}
+			if(!vectorFound) {
+				distanceVectors.add(new RoutingRow(vector.getUsers(), vector.getRouterDestination(), table.getRouterName(), vector.getHops() + 1));
+				changed = true;
 			}
 		}
 		if(!changed) {
@@ -81,48 +121,6 @@ public class RoutingTable  {
 
 	public ArrayList<RoutingRow> getRows() {
 		return distanceVectors;
-	}
-
-	
-	/**Routingtable constructor that turns a DatagramPacket made from a RoutingTable into a RoutingTable
-	 * @param packet
-	 */
-	@SuppressWarnings("unchecked")
-	public RoutingTable (DatagramPacket packet) {
-
-		try {
-
-			byte[] data;
-			ByteArrayInputStream bin;
-			ObjectInputStream oin;
-
-			data = packet.getData();  // use packet content as seed for stream
-			bin = new ByteArrayInputStream(data);
-			oin = new ObjectInputStream(bin);
-			
-			int packetType = oin.readInt();  // read type from beginning of packet
-
-			switch(packetType) {   // depending on type create content object 
-			case ROUTING_TABLE_CODE:
-				this.port = oin.readInt();
-				this.routerName = oin.readUTF();
-				this.distanceVectors = (ArrayList<RoutingRow>)oin.readObject();
-
-
-				break;
-			
-			default:
-				this.port  = -1;
-				this.routerName = null;
-				this.distanceVectors = null;
-				break;
-			}
-			oin.close();
-			bin.close();
-
-		}
-		catch(Exception e) {e.printStackTrace();}
-
 	}
 
 	public int getTimesNotChanged() {

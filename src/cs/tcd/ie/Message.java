@@ -57,6 +57,7 @@ public class Message {
 
 				break;
 			}
+			information = message.split(",");
 			oin.close();
 			bin.close();
 

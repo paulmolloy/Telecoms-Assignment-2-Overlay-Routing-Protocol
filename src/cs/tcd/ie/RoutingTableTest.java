@@ -20,7 +20,7 @@ public class RoutingTableTest {
 
 		
 		Router r1 = new Router(r1Users, testRName, testPort);
-		RoutingTable rTable1 = new RoutingTable(r1);
+		RoutingTable rTable1 = new RoutingTable(r1, testRName);
 		
 		DatagramPacket packet =rTable1.toDatagramPacket();
 		RoutingTable table = new RoutingTable(packet);
