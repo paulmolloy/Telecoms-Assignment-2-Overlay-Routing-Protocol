@@ -109,23 +109,23 @@ public class Client {
 			String line = sc.next();
 			String[] data = line.split(":");
 			if(data[0].equals("Aaron") || data[0].equals("Able"))	{
-				routers.get(0).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(0).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}	else if(data[0].equals("Ben")) {
-				routers.get(1).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(1).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}	else if(data[0].equals("Carl") || data[0].equals("Carla") || data[0].equals("Cian")) {
-				routers.get(2).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(2).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}	else if(data[0].equals("Dillon") || data[0].equals("Denise")) {
-				routers.get(3).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(3).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}	else if(data[0].equals("Earl") || data[0].equals("Emma")) {
-				routers.get(4).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(4).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}	else if(data[0].equals("Fiona")) {
-				routers.get(5).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(5).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}	else if(data[0].equals("Gloria") || data[0].equals("Gabrial")) {
-				routers.get(6).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(6).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}	else if(data[0].equals("Harry") || data[0].equals("Hellen")) {
-				routers.get(7).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(7).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}	else if(data[0].equals("Ian")) {
-				routers.get(8).sendMessage(new Message(data[0] + "," + data[1] + data[3]));
+				routers.get(8).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 			}
 			System.out.println("Message Received");
 		}
