@@ -1,10 +1,11 @@
 package cs.tcd.ie;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RoutingRow {
+public class RoutingRow implements Serializable {
 
-	private String userName, routerDestination, routerIntermediate;
+	private String routerDestination, routerIntermediate;
 	private ArrayList<User> users;
 	private int hops;
 
@@ -18,15 +19,15 @@ public class RoutingRow {
 	public ArrayList<User> getUsers() {
 		return users;
 	}
-	
+
 	public String getRouterDestination() {
 		return routerDestination;
 	}
-	
+
 	public String getRouterChoice() {
 		return routerIntermediate;
 	}
-	
+
 	public int getHops() {
 		return hops;
 	}
@@ -38,11 +39,11 @@ public class RoutingRow {
 	public void setRouterDestination(String routerDestination) {
 		this.routerDestination = routerDestination;
 	}
-	
+
 	public void setRouterChoice(String routerChoice) {
 		this.routerIntermediate = routerChoice;
 	}
-	
+
 	public void setHops(int hops) {
 		this.hops = hops;
 	}

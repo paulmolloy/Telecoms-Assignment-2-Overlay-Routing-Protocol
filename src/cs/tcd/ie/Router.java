@@ -24,14 +24,15 @@ public class Router extends Node {
 	public Router(ArrayList<User> users, String routerName, int port) { 	//possibly add adjacent ports to constuctor
 		this.terminal = new Terminal(routerName);
 		listOfRouters  = new ArrayList<Router>();
-		this.table = new RoutingTable(this);
 		this.setRouterName(routerName);
-		table.setRouterName(routerName);
 		this.setPort(port);
-		table.setPort(port);
+		this.users = users;
 		this.setUsers(users);
+		this.table = new RoutingTable(this, routerName);
+		table.setRouterName(routerName);
+		table.setPort(port);
 		try {
-			socket= new DatagramSocket(this.getPort());
+			socket = new DatagramSocket(this.getPort());
 			listener.go();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -54,20 +55,22 @@ public class Router extends Node {
 		int type = checkPacketType(packet);
 		switch(type){
 			case RoutingTable.ROUTING_TABLE_CODE:
-				//what happens when a RoutingTableDatagramPacket is received
 				RoutingTable rt = new RoutingTable(packet);
 				table.updateRoutingTable(rt);
 				if(RoutingTable.timesToBeUnchaged <= table.getTimesNotChanged()) {
-					// Do Nothing!
 				}	else	{
-					terminal.println("Received ping from " + rt.getRouterName());
 					ping();
 				}
 				break;
 			case Message.MESSAGE_CODE:
-				//what happens when a MessageDatagramPacket is received
+				terminal.println("recieved message!");
 				Message message = new Message(packet);
-				sendMessage(message);
+				if(routerContainsUser(message.getUserTo())) {
+					terminal.println("From: " + message.getUserFrom() + ",To: " + message.getUserTo() + ", Message:" + message.getMessage());
+				}	else	{
+					terminal.println("Message not for user on this Router.");
+					sendMessage(message);
+				}
 				break;
 			default:
 				break;
@@ -80,6 +83,7 @@ public class Router extends Node {
 
 	@Override
 	public void sendMessage(Message message) {
+		terminal.println("Sending Message to: " + message.getUserTo());
 		DatagramPacket packet = null;
 		String routerDestination = table.getRouterToSendTo(message.getUserTo());
 		Router routerToSendTo = null;
@@ -90,14 +94,14 @@ public class Router extends Node {
 		}
 
 		if(routerToSendTo == null) {
-			terminal.println("From: " + message.getUserFrom() + ", Message: " + message.getMessage());
+			terminal.println("User not found on network.");
 		}	else {
 			/*
 			 * need to change the mesage to include the router that needs to receive the message as well!!!!!!!!!!!!!!
 			 */
-			terminal.println("Message From: " + message.getUserFrom() + ", To: " + message.getUserTo());
 			InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
 			packet = message.toDatagramPacket();
+			packet.setSocketAddress(dstAddress);
 			try {
 				socket.send(packet);
 			} catch (IOException e) {
@@ -106,6 +110,7 @@ public class Router extends Node {
 			}
 		}
 	}
+
 	/**Checks which type of packet is sent returns its code.
 	 * @return int packetTypeCode
 	 */
@@ -141,14 +146,11 @@ public class Router extends Node {
 			packet.setSocketAddress(dstAddress);
 			try {
 				socket.send(packet);
-				terminal.println("Sent packetie");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			terminal.println("Finished pinging to " + routerSendingTo.getRouterName());
 		}
-		terminal.println("Finished Pinging!");
 	}
 
 	public String getName() {
@@ -180,6 +182,14 @@ public class Router extends Node {
 		this.port = port;
 	}
 
+	public boolean routerContainsUser(String userName) {
+		for(User user: users) {
+			if(user.getName().equals(userName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public String getRouterName() {
 		return routerName;

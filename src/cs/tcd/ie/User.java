@@ -1,15 +1,17 @@
 package cs.tcd.ie;
 
-public class User {
-	
+import java.io.Serializable;
+
+public class User implements Serializable {
+
 	private String userName;
-	
+
 	public User(String userName) {
 		this.userName = userName;
 	}
-	
+
 	public String getName() {
 		return userName;
 	}
-	
+
 }

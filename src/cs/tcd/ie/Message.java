@@ -8,27 +8,27 @@ import java.net.DatagramPacket;
 import java.util.ArrayList;
 
 public class Message {
-	
-	
+
+
 	/**
 	 * Message is used to construct and deconstruct the packets that are sent to and from
 	 * each router. They possess getter and setter methods.
 	 */
-	
+
 	public static final int MESSAGE_CODE = 0;
 	private String message;
 	private String[] information;
-	
+
 	public Message() {
 		this.message = "";
 	}
-	
+
 	public Message(String message) {
 		this.message = message;
 		information = message.split(",");
 	}
-	
-	
+
+
 	/**Message constructor that turns a DatagramPacket made from a Message into a Message
 	 * @param packet
 	 */
@@ -43,20 +43,21 @@ public class Message {
 			data= packet.getData();  // use packet content as seed for stream
 			bin= new ByteArrayInputStream(data);
 			oin= new ObjectInputStream(bin);
-			
+
 			int packetType = oin.readInt();  // read type from beginning of packet
 
 			switch(packetType) {   // depending on type create content object 
-			case MESSAGE_CODE:
+				case MESSAGE_CODE:
 
-				this.message = oin.readUTF();
-				break;
-			
-			default:
-				this.message  = null;
+					this.message = oin.readUTF();
+					break;
 
-				break;
+				default:
+					this.message  = null;
+
+					break;
 			}
+			information = message.split(",");
 			oin.close();
 			bin.close();
 
@@ -64,7 +65,7 @@ public class Message {
 		catch(Exception e) {e.printStackTrace();}
 
 	}
-	
+
 
 	/**Converts a Message into a DatagramPacket to be sent
 	 * @return DatagramPacket
@@ -78,10 +79,10 @@ public class Message {
 			byte[] data;
 			bout= new ByteArrayOutputStream();
 			oout= new ObjectOutputStream(bout);
-			
+
 			oout.writeInt(MESSAGE_CODE);
 			oout.writeUTF(this.message);
-			
+
 			oout.flush();
 			data= bout.toByteArray(); // convert content to byte array
 
@@ -93,7 +94,7 @@ public class Message {
 
 		return packet;
 	}
-	
+
 	public String toString(){
 		return this.message;
 	}
@@ -113,7 +114,7 @@ public class Message {
 	public String getMessage() {
 		return information[2];
 	}
-	
+
 	public byte[] getBytes() {
 		return message.getBytes();
 	}
@@ -121,7 +122,7 @@ public class Message {
 	/*
 	 * Setters
 	 */
-	
+
 	public void setUserFrom(String string) {
 		message += string;
 	}
