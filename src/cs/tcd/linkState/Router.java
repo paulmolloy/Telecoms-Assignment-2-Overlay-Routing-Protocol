@@ -13,24 +13,29 @@ import tcdIO.Terminal;
 
 public class Router extends Node {
 
-	private ArrayList<Router> listOfRouters;
-	private RoutingTable table;
+	private ArrayList<Router> listOfConnectedRouters;
 	private String routerName;
 	private int port;
 	private ArrayList<User> users;
 	private Terminal terminal;
+	private ArrayList<TopologyTable> tables;
+	private TopologyTable table;
+	private ForwardingTable forwardingTable;
+	private Coordinate coord;
+	private int numOfTimesTablesTheSame;
 	static final String DEFAULT_DST_NODE = "localhost";
+	static final Integer MAX_NUM_OF_TIMES_TABLES_THE_SAME = 30;
 
-	public Router(ArrayList<User> users, String routerName, int port) { 	//possibly add adjacent ports to constuctor
+	public Router(ArrayList<User> users, Coordinate coord, String routerName, int port) { 	//possibly add adjacent ports to constuctor
 		this.terminal = new Terminal(routerName);
-		listOfRouters  = new ArrayList<Router>();
+		listOfConnectedRouters  = new ArrayList<Router>();
+		this.numOfTimesTablesTheSame = 0;
+		this.createTopologyTable();
+		this.coord = coord;
 		this.setRouterName(routerName);
 		this.setPort(port);
 		this.users = users;
 		this.setUsers(users);
-		this.table = new RoutingTable(this, routerName);
-		table.setRouterName(routerName);
-		table.setPort(port);
 		try {
 			socket = new DatagramSocket(this.getPort());
 			listener.go();
@@ -44,7 +49,7 @@ public class Router extends Node {
 	 * Add the routers that are connected to this router in the network
 	 */
 	public void addConnectedRouter(Router router) {
-		listOfRouters.add(router);
+		listOfConnectedRouters.add(router);
 	}
 
 	/*
@@ -54,12 +59,24 @@ public class Router extends Node {
 	public synchronized void onReceipt(DatagramPacket packet) {
 		int type = checkPacketType(packet);
 		switch(type){
-			case RoutingTable.ROUTING_TABLE_CODE:
-				RoutingTable rt = new RoutingTable(packet);
-				table.updateRoutingTable(rt);
-				if(RoutingTable.timesToBeUnchaged <= table.getTimesNotChanged()) {
+			case TopologyTable.TOPOLOGY_TABLE_CODE:
+				TopologyTable tt = new TopologyTable(packet);
+				boolean tableAlreadyInList = false;
+				int index = 0;
+				while(!tableAlreadyInList && index < tables.size()) {
+					if(tables.get(index++).isSameTable(tt)) {
+						tableAlreadyInList = true;
+					}
+				}
+				if(!tableAlreadyInList) {
+					tables.add(tt);
 				}	else	{
+					numOfTimesTablesTheSame++;
+				}
+				if(numOfTimesTablesTheSame <= MAX_NUM_OF_TIMES_TABLES_THE_SAME) {
 					ping();
+				}	else	{
+					forwardingTable = new ForwardingTable(tables, routerName);
 				}
 				break;
 			case Message.MESSAGE_CODE:
@@ -85,20 +102,17 @@ public class Router extends Node {
 	public void sendMessage(Message message) {
 		terminal.println("Sending Message to: " + message.getUserTo());
 		DatagramPacket packet = null;
-		String routerDestination = table.getRouterToSendTo(message.getUserTo());
+		String routerDestination = forwardingTable.getRouterTo(message.getUserTo());
 		Router routerToSendTo = null;
-		for(Router routerToSend: listOfRouters) {
+		for(Router routerToSend: listOfConnectedRouters) {
 			if(routerToSend.getName().equals(routerDestination)) {
 				routerToSendTo = routerToSend;
 			}
 		}
 
 		if(routerToSendTo == null) {
-			terminal.println("User not found on network.");
+			terminal.println("Router: " + routerToSendTo + " is not found in Connected Routers.");
 		}	else {
-			/*
-			 * need to change the mesage to include the router that needs to receive the message as well!!!!!!!!!!!!!!
-			 */
 			InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
 			packet = message.toDatagramPacket();
 			packet.setSocketAddress(dstAddress);
@@ -120,9 +134,9 @@ public class Router extends Node {
 			ByteArrayInputStream bin;
 			ObjectInputStream oin;
 
-			data= packet.getData();  // use packet content as seed for stream
-			bin= new ByteArrayInputStream(data);
-			oin= new ObjectInputStream(bin);
+			data = packet.getData();  // use packet content as seed for stream
+			bin = new ByteArrayInputStream(data);
+			oin = new ObjectInputStream(bin);
 
 			int packetType = oin.readInt();  // read type from beginning of packet
 
@@ -140,15 +154,17 @@ public class Router extends Node {
 	 */
 	@Override
 	public synchronized void ping() {
-		DatagramPacket packet = table.toDatagramPacket();
-		for(Router routerSendingTo : listOfRouters){
-			InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerSendingTo.getPort());
-			packet.setSocketAddress(dstAddress);
-			try {
-				socket.send(packet);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		for(TopologyTable tableToSend: tables) {
+			DatagramPacket packet = tableToSend.toDatagramPacket();
+			for (Router routerSendingTo : listOfConnectedRouters) {
+				InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerSendingTo.getPort());
+				packet.setSocketAddress(dstAddress);
+				try {
+					socket.send(packet);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -157,21 +173,12 @@ public class Router extends Node {
 		return routerName;
 	}
 
-
 	public ArrayList<Router> getListOfRouters() {
-		return listOfRouters;
+		return listOfConnectedRouters;
 	}
 
 	public void setListOfRouters(ArrayList<Router> listOfRouters) {
-		this.listOfRouters = listOfRouters;
-	}
-
-	public RoutingTable getTable() {
-		return table;
-	}
-
-	public void setTable(RoutingTable table) {
-		this.table = table;
+		this.listOfConnectedRouters = listOfRouters;
 	}
 
 	public int getPort() {
@@ -191,6 +198,10 @@ public class Router extends Node {
 		return false;
 	}
 
+	public Coordinate getCoord() {
+		return coord;
+	}
+
 	public String getRouterName() {
 		return routerName;
 	}
@@ -207,4 +218,14 @@ public class Router extends Node {
 		return this.users;
 	}
 
+	private void createTopologyTable() {
+		ArrayList<String> routers = new ArrayList<String>();
+		ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
+		for(Router router: listOfConnectedRouters) {
+			routers.add(router.getName());
+			coords.add(router.getCoord());
+		}
+		table = new TopologyTable(routers, coords, users, routerName, coord);
+		tables.add(table);
+	}
 }

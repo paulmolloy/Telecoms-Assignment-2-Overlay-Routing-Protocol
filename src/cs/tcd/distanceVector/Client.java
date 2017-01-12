@@ -21,7 +21,6 @@ public class Client {
 		usersB.add(new User("Ben"));
 		routers.add(new Router(usersB, "B", 50001));
 
-
 		ArrayList<User> usersC = new ArrayList<User>();
 		usersC.add(new User("Carl"));
 		usersC.add(new User("Carla"));
