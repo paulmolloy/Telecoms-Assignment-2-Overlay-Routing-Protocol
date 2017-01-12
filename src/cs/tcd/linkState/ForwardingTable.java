@@ -13,24 +13,27 @@ public class ForwardingTable {
     private String[] edgeTo;
     private double[] distTo;
     private ForwardingRow[] forwardingTable;
-    String routerName;
+    private String routerName;
+    static final Integer MAX_SIZE_OF_NETWORK = 10000000;
 
 
     public ForwardingTable(ArrayList<TopologyTable> topologyTables, String routerName) {
         this.tables = topologyTables;
         this.routerName = routerName;
 
-        pq = new IndexMinPQ<TopologyRow>(Integer.MAX_VALUE);                                        // Max number of routers in network.
+        pq = new IndexMinPQ<TopologyRow>(MAX_SIZE_OF_NETWORK);                                        // Max number of routers in network.
         edgeTo = new String[tables.size()];
         distTo = new double[tables.size()];
         forwardingTable = new ForwardingRow[tables.size()];
 
         for(int i = 0; i < tables.size(); i++) {
             TopologyTable tmp = tables.get(i);
-            distTo[Integer.parseInt(tmp.getRouterName(), 10) - 65] = Double.POSITIVE_INFINITY;
+            char letter = tmp.getRouterName().charAt(0);
+            int index = letter - 65;
+            distTo[index] = Double.POSITIVE_INFINITY;
             if(tmp.getRouterName().equals(routerName)) {
                 pq.insert(0, new TopologyRow(tmp.getRouterName(), 0));
-                distTo[Integer.parseInt(tmp.getRouterName(), 10) - 65] = 0;
+                distTo[index] = 0;
             }
         }
 
@@ -53,8 +56,10 @@ public class ForwardingTable {
             }
 
             for(TopologyRow row: connectedRouters) {
-                int routerIndex = Integer.parseInt(row.getRouter(), 10) - 65;
-                int mainRouterIndex = Integer.parseInt(mainRow.getRouter(), 10) - 65;
+                char letterOne = row.getRouter().charAt(0);
+                int routerIndex = letterOne - 65;
+                char letterTwo = row.getRouter().charAt(0);
+                int mainRouterIndex = letterTwo - 65;
                 if(distTo[routerIndex] > distTo[mainRouterIndex] + row.getDistance()) {
                     distTo[routerIndex] = distTo[mainRouterIndex] + row.getDistance();
                     edgeTo[routerIndex] = mainRow.getRouter();
@@ -93,7 +98,9 @@ public class ForwardingTable {
                     if(nextRouter.equals(routerName)) {
                         keepGoing = false;
                     }   else    {
-                        fr = forwardingTable[Integer.parseInt(nextRouter, 10) - 65];
+                        char letter = nextRouter.charAt(0);
+                        int index = letter - 65;
+                        fr = forwardingTable[index];
                     }
                 }
                 return nextRouter;

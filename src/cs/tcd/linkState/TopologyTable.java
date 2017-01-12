@@ -1,9 +1,6 @@
 package cs.tcd.linkState;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 
@@ -13,13 +10,12 @@ import java.util.ArrayList;
  */
 public class TopologyTable {
 
-    private ArrayList<TopologyRow> vectors;
+    private ArrayList<TopologyRow> table;
     private ArrayList<String> connectedRouters;
     private ArrayList<User> users;
     private ArrayList<Coordinate> coords;
     private Coordinate coord;
     private String routerName;
-    private Table table;
     public static final int TOPOLOGY_TABLE_CODE = 1;
 
     public TopologyTable(ArrayList<String> connectedRouters, ArrayList<Coordinate> coords, ArrayList<User> users, String routerName, Coordinate mainCoord) {
@@ -29,25 +25,6 @@ public class TopologyTable {
         this.coord = mainCoord;
         this.coords = coords;
         createVectors();
-    }
-
-    private class Table {
-
-        private ArrayList<TopologyRow> vectors;
-        private ArrayList<User> users;
-
-        public Table(ArrayList<TopologyRow> vectors, ArrayList<User> usersOfRouter) {
-            this.vectors = vectors;
-            this.users = users;
-        }
-
-        public ArrayList<User> getUsers() {
-            return users;
-        }
-
-        public ArrayList<TopologyRow> getVectors() {
-            return vectors;
-        }
     }
 
     public TopologyTable(DatagramPacket packet) {
@@ -64,7 +41,8 @@ public class TopologyTable {
             switch(packetType) {   // depending on type create content object
                 case TOPOLOGY_TABLE_CODE:
                     this.routerName = oin.readUTF();
-                    this.table = (Table)oin.readObject();
+                    this.table = (ArrayList<TopologyRow>) oin.readObject();
+                    this.users = (ArrayList<User>) oin.readObject();
                     break;
 
                 default:
@@ -88,18 +66,17 @@ public class TopologyTable {
     }
 
     public ArrayList<User> getUsers() {
-        return table.getUsers();
+        return users;
     }
 
     public ArrayList<TopologyRow> getVectors() {
-        return table.getVectors();
+        return table;
     }
 
     private void createVectors() {
         for(int i = 0; i < connectedRouters.size(); i++) {
-            vectors.add(new TopologyRow(connectedRouters.get(i), coords.get(i).getDistanceFrom(coord)));
+            table.add(new TopologyRow(connectedRouters.get(i), coords.get(i).getDistanceFrom(coord)));
         }
-        this.table = new Table(vectors, users);
     }
 
     /**Converts a Routing table into a DatagramPacket to be sent
@@ -119,8 +96,10 @@ public class TopologyTable {
 
             oout.writeUTF(routerName);
             oout.writeObject(table);
-
             oout.flush();
+            oout.writeObject(users);
+            oout.flush();
+
             data = bout.toByteArray(); // convert content to byte array
 
             packet = new DatagramPacket(data, data.length); // create packet from byte array

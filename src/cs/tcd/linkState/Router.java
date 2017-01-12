@@ -24,9 +24,10 @@ public class Router extends Node {
 	private Coordinate coord;
 	private int numOfTimesTablesTheSame;
 	static final String DEFAULT_DST_NODE = "localhost";
-	static final Integer MAX_NUM_OF_TIMES_TABLES_THE_SAME = 30;
+	static final Integer MAX_NUM_OF_TIMES_TABLES_THE_SAME = 1000;
 
 	public Router(ArrayList<User> users, Coordinate coord, String routerName, int port) { 	//possibly add adjacent ports to constuctor
+		this.routerName = routerName;
 		this.terminal = new Terminal(routerName);
 		listOfConnectedRouters  = new ArrayList<Router>();
 		this.numOfTimesTablesTheSame = 0;
@@ -77,6 +78,7 @@ public class Router extends Node {
 				if(numOfTimesTablesTheSame <= MAX_NUM_OF_TIMES_TABLES_THE_SAME) {
 					ping();
 				}	else	{
+					terminal.println("size of table: " + tables.size());
 					forwardingTable = new ForwardingTable(tables, routerName);
 				}
 				break;

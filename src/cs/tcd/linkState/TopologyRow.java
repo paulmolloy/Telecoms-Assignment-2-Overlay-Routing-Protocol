@@ -3,7 +3,7 @@ package cs.tcd.linkState;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TopologyRow implements Comparable<TopologyRow> {
+public class TopologyRow implements Comparable<TopologyRow>, Serializable{
 
     private String router;
     private ArrayList<User> users;
