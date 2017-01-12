@@ -61,6 +61,7 @@ public class Router extends Node {
 		switch(type){
 			case TopologyTable.TOPOLOGY_TABLE_CODE:
 				TopologyTable tt = new TopologyTable(packet);
+				terminal.println("Received Ping from: " + tt.getRouterName());
 				boolean tableAlreadyInList = false;
 				int index = 0;
 				while(!tableAlreadyInList && index < tables.size()) {
@@ -219,6 +220,7 @@ public class Router extends Node {
 	}
 
 	private void createTopologyTable() {
+		tables = new ArrayList<TopologyTable>();
 		ArrayList<String> routers = new ArrayList<String>();
 		ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
 		for(Router router: listOfConnectedRouters) {

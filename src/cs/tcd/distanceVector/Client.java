@@ -3,8 +3,6 @@ package cs.tcd.distanceVector;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import edu.stanford.nlp.io.EncodingPrintWriter.out;
-
 public class Client {
 
 	public static void main(String[] args) {
