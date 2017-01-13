@@ -1,6 +1,8 @@
 package cs.tcd.distanceVector;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
@@ -8,6 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+
 
 import tcdIO.Terminal;
 
@@ -53,6 +56,7 @@ public class Router extends Node {
 	@Override
 	public synchronized void onReceipt(DatagramPacket packet) {
 		int type = checkPacketType(packet);
+		Message message;
 		switch(type){
 			case RoutingTable.ROUTING_TABLE_CODE:
 				RoutingTable rt = new RoutingTable(packet);
@@ -62,11 +66,13 @@ public class Router extends Node {
 					ping();
 				}
 				break;
+				
 			case Message.MESSAGE_CODE:
 				terminal.println("recieved message!");
-				Message message = new Message(packet);
+				message = new Message(packet);
 				if(routerContainsUser(message.getUserTo())) {
-					terminal.println("From: " + message.getUserFrom() + ",To: " + message.getUserTo() + ", Message:" + message.getMessage());
+					//terminal.println(message.getType())
+					terminal.println("From: " + message.getUserFrom() + ",To: " + message.getUserTo() + ", Normal Message:" + message.getMessage());
 				}	else	{
 					terminal.println("Message not for user on this Router.");
 					terminal.println("Recieved from: Router " + table.getRouterToSendTo(message.getUserFrom()) + " Sending on to: Router " + table.getRouterToSendTo(message.getUserTo()));
@@ -74,6 +80,35 @@ public class Router extends Node {
 					sendMessage(message);
 				}
 				break;
+			case Message.FILE_CODE:
+				terminal.println("recieved  file message!");
+				message = new Message(packet);
+				if(routerContainsUser(message.getUserTo())) {
+					terminal.println("From: " + message.getUserFrom() + ",To: " + message.getUserTo() + ", FIleName:" + message.getMessage());
+					
+					//Save file
+
+					try {
+						byte[] fileBytes =message.getFileBytes();
+						String fileName = message.getMessage();
+						System.out.println("FileName: " + fileName + " bit: " + fileBytes[0]);
+						FileOutputStream fos = new FileOutputStream("1"+fileName);
+						fos.write(fileBytes);
+						fos.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					
+				}	else	{
+					terminal.println("Message not for user on this Router.");
+					terminal.println("Recieved from: Router " + table.getRouterToSendTo(message.getUserFrom()) + " Sending on to: Router " + table.getRouterToSendTo(message.getUserTo()));
+					
+					sendMessage(message);
+				}
+				break;
+
 			default:
 				break;
 		}
@@ -99,7 +134,7 @@ public class Router extends Node {
 			terminal.println("User not found on network.");
 		}	else {
 			/*
-			 * need to change the mesage to include the router that needs to receive the message as well!!!!!!!!!!!!!!
+			 * need to change the message to include the router that needs to receive the message as well!!!!!!!!!!!!!!
 			 */
 			InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
 			packet = message.toDatagramPacket();

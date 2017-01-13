@@ -1,6 +1,12 @@
 package cs.tcd.distanceVector;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
@@ -163,12 +169,39 @@ public class Client {
 		routers.get(0).ping();
 
 		System.out.println("Please enter the users to send a string from and to, followed by a message. Each part should be seperated by a colan, ':'.");
-		Scanner sc  = new Scanner(System.in);
+		System.out.println("To send a file write in the form 'FILE:userFrom:userTO:fileName");Scanner sc  = new Scanner(System.in);
 		while(sc.hasNext()) {
 			String line = sc.nextLine();
 			String[] data = line.split(":");
 			if(data[0].equals("FILE") &&data.length==4){
 				
+				String fName = data[3];
+				File file= new File(fName);	
+				byte[]buffer= new byte[(int) file.length()];
+				FileInputStream fin;
+				
+				try {
+					fin = new FileInputStream(file);
+					size= fin.read(buffer);
+					if (size==-1) {
+						fin.close();
+						
+					}
+					Path path = Paths.get(fName);
+					byte[] fData = Files.readAllBytes(path);
+					Message fileMessage= new Message(data[1] + "," + data[2] + "," + fName , fData);
+					System.out.println("Sending file:" +fName ); // Send packet with file name and length
+					routers.get(userRouterHT.get(data[1])).sendMessage(fileMessage);
+					
+					fin.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
 				
 			}else{
 				routers.get(userRouterHT.get(data[0])).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));	
@@ -177,5 +210,6 @@ public class Client {
 			}
 			System.out.println("Message Received");
 		}
+		sc.close();
 	}
 }
