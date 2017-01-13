@@ -31,7 +31,6 @@ public class Router extends Node {
 		this.terminal = new Terminal(routerName);
 		listOfConnectedRouters  = new ArrayList<Router>();
 		this.numOfTimesTablesTheSame = 0;
-		this.createTopologyTable();
 		this.coord = coord;
 		this.setRouterName(routerName);
 		this.setPort(port);
@@ -51,6 +50,7 @@ public class Router extends Node {
 	 */
 	public void addConnectedRouter(Router router) {
 		listOfConnectedRouters.add(router);
+		createTopologyTable();
 	}
 
 	/*
@@ -221,7 +221,7 @@ public class Router extends Node {
 		return this.users;
 	}
 
-	private void createTopologyTable() {
+	public void createTopologyTable() {
 		tables = new ArrayList<TopologyTable>();
 		ArrayList<String> routers = new ArrayList<String>();
 		ArrayList<Coordinate> coords = new ArrayList<Coordinate>();

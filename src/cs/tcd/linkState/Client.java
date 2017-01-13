@@ -93,7 +93,22 @@ public class Client {
 		routers.get(9).addConnectedRouter(routers.get(1));	// Connect Router J to B
 		routers.get(9).addConnectedRouter(routers.get(7));	// Connect Router J to H
 
+		/*
+		routers.get(0).createTopologyTable();
+		routers.get(1).createTopologyTable();
+		routers.get(2).createTopologyTable();
+		routers.get(3).createTopologyTable();
+		routers.get(4).createTopologyTable();
+		routers.get(5).createTopologyTable();
+		routers.get(6).createTopologyTable();
+		routers.get(7).createTopologyTable();
+		routers.get(8).createTopologyTable();
+		routers.get(9).createTopologyTable();
+		*/
+
 		routers.get(0).ping();
+
+		System.out.print("pinging complete!!");
 
 		System.out.println("Please enter the users to send a string from and to, followed by a message. Each part should be seperated by a colan, ':'.");
 		Scanner sc  = new Scanner(System.in);

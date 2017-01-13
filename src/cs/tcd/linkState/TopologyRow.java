@@ -28,6 +28,7 @@ public class TopologyRow implements Comparable<TopologyRow>, Serializable{
     }
 
 
+
     public String getRouter() {
         return router;
     }

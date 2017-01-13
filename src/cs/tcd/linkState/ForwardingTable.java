@@ -9,19 +9,19 @@ import java.util.*;
 public class ForwardingTable {
 
     private ArrayList<TopologyTable> tables;
-    private IndexMinPQ<TopologyRow> pq;
+    private PriorityQueue<TopologyRow> pq;
     private String[] edgeTo;
     private double[] distTo;
     private ForwardingRow[] forwardingTable;
     private String routerName;
-    static final Integer MAX_SIZE_OF_NETWORK = 10000000;
+    static final Integer MAX_SIZE_OF_NETWORK = 1000;
 
 
     public ForwardingTable(ArrayList<TopologyTable> topologyTables, String routerName) {
         this.tables = topologyTables;
         this.routerName = routerName;
 
-        pq = new IndexMinPQ<TopologyRow>(MAX_SIZE_OF_NETWORK);                                        // Max number of routers in network.
+        pq = new PriorityQueue<>();                                        // Max number of routers in network.
         edgeTo = new String[tables.size()];
         distTo = new double[tables.size()];
         forwardingTable = new ForwardingRow[tables.size()];
@@ -32,9 +32,10 @@ public class ForwardingTable {
             int index = letter - 65;
             distTo[index] = Double.POSITIVE_INFINITY;
             if(tmp.getRouterName().equals(routerName)) {
-                pq.insert(0, new TopologyRow(tmp.getRouterName(), 0));
+                pq.add(new TopologyRow(tmp.getRouterName(), 0));
                 distTo[index] = 0;
             }
+            forwardingTable[index] = new ForwardingRow(tmp.getUsers(), tmp.getRouterName(), null);
         }
 
         this.runDjikstra();
@@ -43,36 +44,36 @@ public class ForwardingTable {
 
     public void runDjikstra() {
         while(!pq.isEmpty()) {
-            TopologyRow mainRow = pq.minKey();
-            pq.delMin();
+            TopologyRow mainRow = pq.poll();
 
             ArrayList<TopologyRow> connectedRouters = null;
-            ArrayList<User> users = null;
             for(TopologyTable table: tables) {
                 if(table.getRouterName().equals(mainRow.getRouter())) {
                     connectedRouters = table.getVectors();
-                    users = table.getUsers();
                 }
             }
 
             for(TopologyRow row: connectedRouters) {
                 char letterOne = row.getRouter().charAt(0);
                 int routerIndex = letterOne - 65;
-                char letterTwo = row.getRouter().charAt(0);
+                char letterTwo = mainRow.getRouter().charAt(0);
                 int mainRouterIndex = letterTwo - 65;
                 if(distTo[routerIndex] > distTo[mainRouterIndex] + row.getDistance()) {
                     distTo[routerIndex] = distTo[mainRouterIndex] + row.getDistance();
                     edgeTo[routerIndex] = mainRow.getRouter();
-                    for(int i = 0; i < pq.size(); i++) {
-                        if(pq.keyOf(i).getRouter().equals(row.getRouter())) {
-                            pq.changeKey(i, new TopologyRow(row.getRouter(), distTo[routerIndex]));
+                    boolean foundTopologyRow = false;
+                    Iterator iterator = pq.iterator();
+                    while(iterator.hasNext()) {
+                        TopologyRow tr = (TopologyRow)iterator.next();
+                        if (tr.getRouter().equals(row.getRouter())) {
+                            pq.remove(tr);
+                            pq.add(new TopologyRow(row.getRouter(), distTo[routerIndex]));
                             forwardingTable[routerIndex].setRouterChoice(mainRow.getRouter());
-                        }   else    {
-                            pq.insert(pq.size(), new TopologyRow(row.getRouter(), distTo[routerIndex]));
+                            foundTopologyRow = true;
                         }
-                        if(row.getRouter().equals(mainRow.getRouter())) {
-                            forwardingTable[mainRouterIndex] = new ForwardingRow(users, mainRow.getRouter(), mainRow.getRouter());
-                        }
+                    }
+                    if(!foundTopologyRow) {
+                        pq.add(new TopologyRow(row.getRouter(), distTo[routerIndex]));
                     }
                 }
             }

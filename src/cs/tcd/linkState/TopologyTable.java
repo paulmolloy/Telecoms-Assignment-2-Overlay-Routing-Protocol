@@ -19,6 +19,7 @@ public class TopologyTable {
     public static final int TOPOLOGY_TABLE_CODE = 1;
 
     public TopologyTable(ArrayList<String> connectedRouters, ArrayList<Coordinate> coords, ArrayList<User> users, String routerName, Coordinate mainCoord) {
+        this.table = new ArrayList<TopologyRow>();
         this.connectedRouters = connectedRouters;
         this.routerName = routerName;
         this.users = users;
@@ -41,8 +42,8 @@ public class TopologyTable {
             switch(packetType) {   // depending on type create content object
                 case TOPOLOGY_TABLE_CODE:
                     this.routerName = oin.readUTF();
-                    this.table = (ArrayList<TopologyRow>) oin.readObject();
-                    this.users = (ArrayList<User>) oin.readObject();
+                    this.table = (ArrayList<TopologyRow>)oin.readObject();
+                    this.users = (ArrayList<User>)oin.readObject();
                     break;
 
                 default:
@@ -96,7 +97,7 @@ public class TopologyTable {
 
             oout.writeUTF(routerName);
             oout.writeObject(table);
-            oout.flush();
+            //oout.flush();
             oout.writeObject(users);
             oout.flush();
 
