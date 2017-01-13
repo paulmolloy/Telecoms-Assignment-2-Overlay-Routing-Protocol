@@ -85,10 +85,13 @@ public class Router extends Node {
 			case Message.MESSAGE_CODE:
 				terminal.println("recieved message!");
 				Message message = new Message(packet);
+				
 				if(routerContainsUser(message.getUserTo())) {
-					terminal.println("From: " + message.getUserFrom() + ",To: " + message.getUserTo() + ", Message:" + message.getMessage());
+					terminal.println("From: " + message.getUserFrom() + ", To: " + message.getUserTo() + ", Message:" + message.getMessage());
 				}	else	{
 					terminal.println("Message not for user on this Router.");
+					terminal.println("Recieved from: Router " + forwardingTable.getRouterTo(message.getUserFrom()) + " Sending on to: Router " + forwardingTable.getRouterTo(message.getUserTo()));
+
 					sendMessage(message);
 				}
 				break;
