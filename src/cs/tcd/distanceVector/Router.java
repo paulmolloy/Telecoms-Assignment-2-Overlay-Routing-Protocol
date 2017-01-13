@@ -69,6 +69,8 @@ public class Router extends Node {
 					terminal.println("From: " + message.getUserFrom() + ",To: " + message.getUserTo() + ", Message:" + message.getMessage());
 				}	else	{
 					terminal.println("Message not for user on this Router.");
+					terminal.println("Recieved from: Router " + table.getRouterToSendTo(message.getUserFrom()) + " Sending on to: Router " + table.getRouterToSendTo(message.getUserTo()));
+					
 					sendMessage(message);
 				}
 				break;
