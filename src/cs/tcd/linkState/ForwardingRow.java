@@ -9,11 +9,16 @@ public class ForwardingRow implements Serializable {
     private ArrayList<User> users;
     private double distance;
 
-    public ForwardingRow(ArrayList<User> users, String routerDestination, String routerIntermediate) {
+    public ForwardingRow(ArrayList<User> users, String routerDestination, String routerIntermediate, double distance) {
+        this.distance = distance;
         this.users = users;
         this.routerDestination = routerDestination;
         this.routerIntermediate = routerIntermediate;
         this.distance = distance;
+    }
+
+    public double getDistanceFromRouter() {
+        return distance;
     }
 
     public ArrayList<User> getUsers() {
@@ -28,6 +33,9 @@ public class ForwardingRow implements Serializable {
         return routerIntermediate;
     }
 
+    public void setRouterDistance(double distance) {
+        this.distance = distance;
+    }
 
     public void setUsers(ArrayList<User> users) {
         this.users = users;

@@ -35,7 +35,7 @@ public class ForwardingTable {
                 pq.add(new TopologyRow(tmp.getRouterName(), 0));
                 distTo[index] = 0;
             }
-            forwardingTable[index] = new ForwardingRow(tmp.getUsers(), tmp.getRouterName(), null);
+            forwardingTable[index] = new ForwardingRow(tmp.getUsers(), tmp.getRouterName(), null, 0);
         }
 
         this.runDjikstra();
@@ -61,20 +61,25 @@ public class ForwardingTable {
                 if(distTo[routerIndex] > distTo[mainRouterIndex] + row.getDistance()) {
                     distTo[routerIndex] = distTo[mainRouterIndex] + row.getDistance();
                     edgeTo[routerIndex] = mainRow.getRouter();
-                    boolean foundTopologyRow = false;
+                    //boolean foundTopologyRow = false;
                     Iterator iterator = pq.iterator();
+                    TopologyRow rowFound = null;
                     while(iterator.hasNext()) {
                         TopologyRow tr = (TopologyRow)iterator.next();
-                        if (tr.getRouter().equals(row.getRouter())) {
-                            pq.remove(tr);
-                            pq.add(new TopologyRow(row.getRouter(), distTo[routerIndex]));
-                            forwardingTable[routerIndex].setRouterChoice(mainRow.getRouter());
-                            foundTopologyRow = true;
+                        if(tr.getRouter().equals(row.getRouter())) {
+                            rowFound = row;
                         }
                     }
-                    if(!foundTopologyRow) {
+                    if(rowFound != null) {
+                        if(pq.contains(rowFound)) {
+                            pq.remove(rowFound);
+                            pq.add(new TopologyRow(row.getRouter(), distTo[routerIndex]));
+                        }
+                    }   else    {
                         pq.add(new TopologyRow(row.getRouter(), distTo[routerIndex]));
                     }
+                    forwardingTable[routerIndex].setRouterChoice(mainRow.getRouter());
+                    forwardingTable[routerIndex].setRouterDistance(distTo[routerIndex]);
                 }
             }
         }
@@ -82,12 +87,12 @@ public class ForwardingTable {
 
     public String getRouterTo(String userTo) {
         boolean foundRouter =  false;
-        String nextRouter = null;
+        String nextRouter = userTo.substring(0,1);
         ForwardingRow fr = null;
         for(ForwardingRow row: forwardingTable) {
             ArrayList<User> users = row.getUsers();
             for(User user: users) {
-                if(user.equals(userTo)) {
+                if(user.getName().equals(userTo)) {
                     foundRouter = true;
                     fr = row;
                 }
@@ -95,10 +100,10 @@ public class ForwardingTable {
             if(foundRouter) {
                 boolean keepGoing = true;
                 while(keepGoing) {
-                    nextRouter = fr.getRouterChoice();
-                    if(nextRouter.equals(routerName)) {
+                    if(fr.getRouterChoice().equals(routerName)) {
                         keepGoing = false;
                     }   else    {
+                        nextRouter = fr.getRouterChoice();
                         char letter = nextRouter.charAt(0);
                         int index = letter - 65;
                         fr = forwardingTable[index];
