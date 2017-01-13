@@ -115,7 +115,8 @@ public class Router extends Node {
 
 		if(routerToSendTo == null) {
 			terminal.println("Router: " + routerToSendTo + " is not found in Connected Routers.");
-		}	else {
+		}
+		else {
 			InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
 			packet = message.toDatagramPacket();
 			packet.setSocketAddress(dstAddress);

@@ -21,7 +21,7 @@ public class ForwardingTable {
         this.tables = topologyTables;
         this.routerName = routerName;
 
-        pq = new PriorityQueue<>();                                        // Max number of routers in network.
+        pq = new PriorityQueue<TopologyRow>();                                        // Max number of routers in network.
         edgeTo = new String[tables.size()];
         distTo = new double[tables.size()];
         forwardingTable = new ForwardingRow[tables.size()];
