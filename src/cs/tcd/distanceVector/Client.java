@@ -1,6 +1,8 @@
 package cs.tcd.distanceVector;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Scanner;
 
 public class Client {
@@ -9,54 +11,114 @@ public class Client {
 
 		int size = 0;
 		ArrayList<Router> routers = new ArrayList<Router>();
-
+		Router router;
+		String user1;
+		String user2;
+		String user3;
+		Hashtable<String,Integer> userRouterHT = new Hashtable<String,Integer>(); //maps user to pos of router in arraylist
+		
 		ArrayList<User> usersA = new ArrayList<User>();
-		usersA.add(new User("Aaron"));
-		usersA.add(new User("Able"));
-		routers.add(new Router(usersA, "A", 50000));
+		user1 = "Aaron";
+		user2 = "Able";
+		usersA.add(new User(user1));
+		usersA.add(new User(user2));
+		router = new Router(usersA, "A", 50000);
+		routers.add(router);
+		userRouterHT.put(user1, 0);
+		userRouterHT.put(user2, 0);
 
 		ArrayList<User> usersB = new ArrayList<User>();
-		usersB.add(new User("Ben"));
-		routers.add(new Router(usersB, "B", 50001));
+		user1 = "Ben";
+		usersB.add(new User(user1));
+		router = new Router(usersB, "B", 50001);
+		routers.add(router);
+		userRouterHT.put(user1, 1);
 
 		ArrayList<User> usersC = new ArrayList<User>();
-		usersC.add(new User("Carl"));
-		usersC.add(new User("Carla"));
-		usersC.add(new User("Cian"));
-		routers.add(new Router(usersC, "C", 50002));
+		user1 = "Carl";
+		user2 = "Carla";
+		user3 = "Cian";
+		usersC.add(new User(user1));
+		usersC.add(new User(user2));
+		usersC.add(new User(user3));
+		router = new Router(usersC, "C", 50002);
+		routers.add(router);
+		userRouterHT.put(user1, 2);
+		userRouterHT.put(user2, 2);
+		userRouterHT.put(user3, 2);
+		
 
 		ArrayList<User> usersD = new ArrayList<User>();
-		usersD.add(new User("Dillon"));
-		usersD.add(new User("Denise"));
-		routers.add(new Router(usersD, "D", 50003));
+		user1 = "Dillon";
+		user2 = "Denise";
+		usersD.add(new User(user1));
+		usersD.add(new User(user2));
+		router = new Router(usersD, "D", 50003);
+		routers.add(router);
+		userRouterHT.put(user1, 3);
+		userRouterHT.put(user2, 3);
+		
+
 
 		ArrayList<User> usersE = new ArrayList<User>();
-		usersE.add(new User("Earl"));
-		usersE.add(new User("Emma"));
-		routers.add(new Router(usersE, "E", 50004));
+		user1 = "Earl";
+		user2 = "Emma";
+		usersE.add(new User(user1));
+		usersE.add(new User(user2));
+		router = new Router(usersE, "E", 50004);
+		routers.add(router);
+		userRouterHT.put(user1, 4);
+		userRouterHT.put(user2, 4);
+		
+
 
 		ArrayList<User> usersF = new ArrayList<User>();
-		usersF.add(new User("Fiona"));
-		routers.add(new Router(usersF, "F", 50005));
+		user1 = "Fiona";
+		usersF.add(new User(user1));
+		router = new Router(usersF, "F", 50005);
+		routers.add(router);
+		userRouterHT.put(user1, 5);
+
 
 		ArrayList<User> usersG = new ArrayList<User>();
-		usersG.add(new User("Gloria"));
-		usersG.add(new User("Gabrial"));
-		routers.add(new Router(usersG, "G", 50006));
+		user1 = "Gloria";
+		user2 = "Gabrial";
+		usersG.add(new User(user1));
+		usersG.add(new User(user2));
+		router = new Router(usersG, "G", 50006);
+		routers.add(router);
+		userRouterHT.put(user1, 6);
+		userRouterHT.put(user2, 6);
+		
 
 		ArrayList<User> usersH = new ArrayList<User>();
-		usersH.add(new User("Harry"));
-		usersH.add(new User("Hellen"));
-		routers.add(new Router(usersH, "H", 50007));
+		user1 = "Harry";
+		user2 = "Hellen";
+		usersH.add(new User(user1));
+		usersH.add(new User(user2));
+		router = new Router(usersH, "H", 50007);
+		routers.add(router);
+		userRouterHT.put(user1, 7);
+		userRouterHT.put(user2, 7);
+
 
 		ArrayList<User> usersI = new ArrayList<User>();
-		usersI.add(new User("Ian"));
-		routers.add(new Router(usersI, "I", 50008));
+		user1 = "Ian";
+		usersI.add(new User(user1));
+		router = new Router(usersI, "I", 50008);
+		routers.add(router);
+		userRouterHT.put(user1, 8);
 
 		ArrayList<User> usersJ = new ArrayList<User>();
-		usersJ.add(new User("Jill"));
-		usersJ.add(new User("Joe"));
-		routers.add(new Router(usersJ, "J", 50009));
+		user1 = "Jill";
+		user2 = "Joe";
+		usersJ.add(new User(user1));
+		usersJ.add(new User(user2));
+		router = new Router(usersH, "J", 50009);
+		routers.add(router);
+		userRouterHT.put(user1, 9);
+		userRouterHT.put(user2, 9);
+
 
 		size = 10;
 
@@ -105,24 +167,13 @@ public class Client {
 		while(sc.hasNext()) {
 			String line = sc.nextLine();
 			String[] data = line.split(":");
-			if(data[0].equals("Aaron") || data[0].equals("Able"))	{
-				routers.get(0).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
-			}	else if(data[0].equals("Ben")) {
-				routers.get(1).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
-			}	else if(data[0].equals("Carl") || data[0].equals("Carla") || data[0].equals("Cian")) {
-				routers.get(2).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
-			}	else if(data[0].equals("Dillon") || data[0].equals("Denise")) {
-				routers.get(3).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
-			}	else if(data[0].equals("Earl") || data[0].equals("Emma")) {
-				routers.get(4).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
-			}	else if(data[0].equals("Fiona")) {
-				routers.get(5).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
-			}	else if(data[0].equals("Gloria") || data[0].equals("Gabrial")) {
-				routers.get(6).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
-			}	else if(data[0].equals("Harry") || data[0].equals("Hellen")) {
-				routers.get(7).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
-			}	else if(data[0].equals("Ian")) {
-				routers.get(8).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
+			if(data[0].equals("FILE") &&data.length==4){
+				
+				
+			}else{
+				routers.get(userRouterHT.get(data[0])).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));	
+				
+
 			}
 			System.out.println("Message Received");
 		}
