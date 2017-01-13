@@ -113,7 +113,7 @@ public class Client {
 		System.out.println("Please enter the users to send a string from and to, followed by a message. Each part should be seperated by a colan, ':'.");
 		Scanner sc  = new Scanner(System.in);
 		while(sc.hasNext()) {
-			String line = sc.next();
+			String line = sc.nextLine();
 			String[] data = line.split(":");
 			if(data[0].equals("Aaron") || data[0].equals("Able"))	{
 				routers.get(0).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
