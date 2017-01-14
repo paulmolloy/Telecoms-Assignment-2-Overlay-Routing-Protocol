@@ -80,7 +80,6 @@ public class Router extends Node {
 				if(numOfTimesTablesTheSame <= MAX_NUM_OF_TIMES_TABLES_THE_SAME) {
 					ping();
 				}	else	{
-					terminal.println("size of table: " + tables.size());
 					forwardingTable = new ForwardingTable(tables, routerName);
 				}
 				break;

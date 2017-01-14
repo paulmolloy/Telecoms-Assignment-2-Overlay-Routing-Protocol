@@ -60,6 +60,7 @@ public class Router extends Node {
 		switch(type){
 			case RoutingTable.ROUTING_TABLE_CODE:
 				RoutingTable rt = new RoutingTable(packet);
+				terminal.println("Received Ping from: " + rt.getRouterName());
 				table.updateRoutingTable(rt);
 				if(RoutingTable.timesToBeUnchaged <= table.getTimesNotChanged()) {
 				}	else	{

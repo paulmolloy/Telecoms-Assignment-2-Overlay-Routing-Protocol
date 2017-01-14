@@ -37,7 +37,7 @@
 				ArrayList<User> usersB = new ArrayList<User>();
 				user1 = "Ben";
 				usersB.add(new User(user1));
-				router = new Router(usersB,new Coordinate(1, 2), "B", 50001);
+				router = new Router(usersB, new Coordinate(1, 2), "B", 50001);
 				routers.add(router);
 				userRouterHT.put(user1, 1);
 
@@ -60,7 +60,7 @@
 				user2 = "Denise";
 				usersD.add(new User(user1));
 				usersD.add(new User(user2));
-				router = new Router(usersD,new Coordinate(3, 4), "D", 50003);
+				router = new Router(usersD, new Coordinate(3, 4), "D", 50003);
 				routers.add(router);
 				userRouterHT.put(user1, 3);
 				userRouterHT.put(user2, 3);
@@ -72,7 +72,7 @@
 				user2 = "Emma";
 				usersE.add(new User(user1));
 				usersE.add(new User(user2));
-				router = new Router(usersE,new Coordinate(4, 5), "E", 50004);
+				router = new Router(usersE, new Coordinate(4, 5), "E", 50004);
 				routers.add(router);
 				userRouterHT.put(user1, 4);
 				userRouterHT.put(user2, 4);
@@ -82,7 +82,7 @@
 				ArrayList<User> usersF = new ArrayList<User>();
 				user1 = "Fiona";
 				usersF.add(new User(user1));
-				router = new Router(usersF,new Coordinate(5, 6), "F", 50005);
+				router = new Router(usersF, new Coordinate(5, 6), "F", 50005);
 				routers.add(router);
 				userRouterHT.put(user1, 5);
 
@@ -92,7 +92,7 @@
 				user2 = "Gabrial";
 				usersG.add(new User(user1));
 				usersG.add(new User(user2));
-				router = new Router(usersG,new Coordinate(6, 7), "G", 50006);
+				router = new Router(usersG, new Coordinate(6, 7), "G", 50006);
 				routers.add(router);
 				userRouterHT.put(user1, 6);
 				userRouterHT.put(user2, 6);
@@ -103,7 +103,7 @@
 				user2 = "Hellen";
 				usersH.add(new User(user1));
 				usersH.add(new User(user2));
-				router = new Router(usersH,new Coordinate(7, 8), "H", 50007);
+				router = new Router(usersH, new Coordinate(7, 8), "H", 50007);
 				routers.add(router);
 				userRouterHT.put(user1, 7);
 				userRouterHT.put(user2, 7);
@@ -112,7 +112,7 @@
 				ArrayList<User> usersI = new ArrayList<User>();
 				user1 = "Ian";
 				usersI.add(new User(user1));
-				router = new Router(usersI,new Coordinate(8, 9), "I", 50008);
+				router = new Router(usersI, new Coordinate(8, 9), "I", 50008);
 				routers.add(router);
 				userRouterHT.put(user1, 8);
 
@@ -121,7 +121,7 @@
 				user2 = "Joe";
 				usersJ.add(new User(user1));
 				usersJ.add(new User(user2));
-				router = new Router(usersH,new Coordinate(9, 10), "J", 50009);
+				router = new Router(usersH, new Coordinate(9, 10), "J", 50009);
 				routers.add(router);
 				userRouterHT.put(user1, 9);
 				userRouterHT.put(user2, 9);
@@ -164,9 +164,6 @@
 				routers.get(9).addConnectedRouter(routers.get(1));	// Connect Router J to B
 				routers.get(9).addConnectedRouter(routers.get(7));	// Connect Router J to H
 
-
-				//Graph<Router> graph = new Graph<Router>();
-
 				routers.get(0).ping();
 
 				System.out.println("Please enter the users to send a string from and to, followed by a message. Each part should be seperated by a colan, ':'.");
@@ -186,12 +183,11 @@
 							size= fin.read(buffer);
 							if (size==-1) {
 								fin.close();
-								
 							}
 							Path path = Paths.get(fName);
 							byte[] fData = Files.readAllBytes(path);
 							Message fileMessage= new Message(data[1] + "," + data[2] + "," + fName , fData);
-							System.out.println("Sending file:" +fName ); // Send packet with file name and length
+							System.out.println("Sending file:" +fName ); 							// Send packet with file name and length
 							routers.get(userRouterHT.get(data[1])).sendMessage(fileMessage);
 							
 							fin.close();
@@ -202,11 +198,10 @@
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					
 						
 					}else{
-						routers.get(userRouterHT.get(data[0])).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));	
-						
+
+						routers.get(userRouterHT.get(data[0])).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 
 					}
 					System.out.println("Message Received");
