@@ -1,6 +1,7 @@
 package cs.tcd.linkState;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
@@ -9,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
+import cs.tcd.distanceVector.Message;
 import tcdIO.Terminal;
 
 public class Router extends Node {
@@ -82,9 +84,9 @@ public class Router extends Node {
 					forwardingTable = new ForwardingTable(tables, routerName);
 				}
 				break;
-			case Message.MESSAGE_CODE:
+			case cs.tcd.linkState.Message.MESSAGE_CODE:
 				terminal.println("recieved message!");
-				Message message = new Message(packet);
+				cs.tcd.linkState.Message message = new cs.tcd.linkState.Message(packet);
 				
 				if(routerContainsUser(message.getUserTo())) {
 					terminal.println("From: " + message.getUserFrom() + ", To: " + message.getUserTo() + ", Message:" + message.getMessage());
@@ -92,6 +94,34 @@ public class Router extends Node {
 					terminal.println("Message not for user on this Router.");
 					terminal.println("Recieved from: Router " + forwardingTable.getRouterTo(message.getUserFrom()) + " Sending on to: Router " + forwardingTable.getRouterTo(message.getUserTo()));
 
+					sendMessage(message);
+				}
+				break;
+			case Message.FILE_CODE:
+				terminal.println("recieved  file message!");
+				message = new cs.tcd.linkState.Message(packet);
+				if(routerContainsUser(message.getUserTo())) {
+					terminal.println("From: " + message.getUserFrom() + ",To: " + message.getUserTo() + ", FIleName:" + message.getMessage());
+					
+					//Save file
+
+					try {
+						byte[] fileBytes =message.getFileBytes();
+						String fileName = message.getMessage();
+						System.out.println("FileName: " + "1"+fileName ); //one added so it doesnt overwrite original file
+						FileOutputStream fos = new FileOutputStream("1"+fileName);
+						fos.write(fileBytes);
+						fos.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					
+				}	else	{
+					terminal.println("Message not for user on this Router.");
+					terminal.println("Recieved from: Router " + forwardingTable.getRouterTo(message.getUserFrom()) + " Sending on to: Router " + forwardingTable.getRouterTo(message.getUserTo()));
+					
 					sendMessage(message);
 				}
 				break;
@@ -105,7 +135,7 @@ public class Router extends Node {
 	 */
 
 	@Override
-	public void sendMessage(Message message) {
+	public void sendMessage(cs.tcd.linkState.Message message) {
 		terminal.println("Sending Message to: " + message.getUserTo());
 		DatagramPacket packet = null;
 		String routerDestination = forwardingTable.getRouterTo(message.getUserTo());
@@ -236,4 +266,5 @@ public class Router extends Node {
 		table = new TopologyTable(routers, coords, users, routerName, coord);
 		tables.add(table);
 	}
+
 }
