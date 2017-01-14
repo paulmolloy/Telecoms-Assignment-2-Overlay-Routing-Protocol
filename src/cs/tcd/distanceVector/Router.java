@@ -91,7 +91,7 @@ public class Router extends Node {
 					try {
 						byte[] fileBytes =message.getFileBytes();
 						String fileName = message.getMessage();
-						System.out.println("FileName: " + fileName + " bit: " + fileBytes[0]);
+						System.out.println("FileName: " + "1"+fileName ); //one added so it doesnt overwrite original file
 						FileOutputStream fos = new FileOutputStream("1"+fileName);
 						fos.write(fileBytes);
 						fos.close();
