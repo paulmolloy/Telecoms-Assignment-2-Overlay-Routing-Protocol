@@ -2,6 +2,10 @@ package cs.tcd.distanceVector;
 
 import java.io.Serializable;
 
+/*
+	User is a class used to hold a string. Symbolising a name of a user on the network
+ */
+
 public class User implements Serializable {
 
 	private String userName;

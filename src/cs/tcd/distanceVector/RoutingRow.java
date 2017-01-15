@@ -3,6 +3,11 @@ package cs.tcd.distanceVector;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/*
+	RoutingRow is used by RoutingTable, to associate together a destination router with a set of users of that router, and the corresponding
+	router that the message must be sent to in order to achieve the shortest path/number of hops.
+ */
+
 public class RoutingRow implements Serializable {
 
 	private String routerDestination, routerIntermediate;

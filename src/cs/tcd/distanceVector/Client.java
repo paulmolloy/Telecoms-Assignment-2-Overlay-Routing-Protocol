@@ -11,18 +11,31 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
 
+/*
+	Client class is used to create the network of routers.
+	It first's add the users to each router. Then it connects specific routers.
+	Then it begins the pinging process.
+	Finally it allows the user to enter two names, followed by a message of some sort.
+	first user being the person who sends the message and the second person the person who receives the message.
+ */
+
 public class Client {
 
 	public static void main(String[] args) {
 
 		int size = 0;
+
 		ArrayList<Router> routers = new ArrayList<Router>();
 		Router router;
 		String user1;
 		String user2;
 		String user3;
-		Hashtable<String,Integer> userRouterHT = new Hashtable<String,Integer>(); //maps user to pos of router in arraylist
-		
+		Hashtable<String,Integer> userRouterHT = new Hashtable<String,Integer>(); // maps user to pos of router in arraylist
+
+		/*
+			Adds Users to specific Router Objects.
+		 */
+
 		ArrayList<User> usersA = new ArrayList<User>();
 		user1 = "Aaron";
 		user2 = "Able";
@@ -126,9 +139,10 @@ public class Client {
 		userRouterHT.put(user2, 9);
 
 
-		size = 10;
+		/*
+		 	Routers connected to one another
+		 */
 
-		// Routers connected to one another
 		routers.get(0).addConnectedRouter(routers.get(1));	// Connect Router A to B
 
 		routers.get(1).addConnectedRouter(routers.get(0));	// Connect Router B to A
@@ -163,8 +177,9 @@ public class Client {
 		routers.get(9).addConnectedRouter(routers.get(1));	// Connect Router J to B
 		routers.get(9).addConnectedRouter(routers.get(7));	// Connect Router J to H
 
-
-		//Graph<Router> graph = new Graph<Router>();
+		/*
+			Pinging begins.
+		 */
 
 		routers.get(0).ping();
 
@@ -184,6 +199,7 @@ public class Client {
 					fin = new FileInputStream(file);
 					size= fin.read(buffer);
 					if (size==-1) {
+
 						fin.close();
 						
 					}
@@ -201,11 +217,10 @@ public class Client {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			
 				
-			}else{
-				routers.get(userRouterHT.get(data[0])).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));	
-				
+			}	else	{
+
+				routers.get(userRouterHT.get(data[0])).sendMessage(new Message(data[0] + "," + data[1] + "," + data[2]));
 
 			}
 			System.out.println("Message Received");

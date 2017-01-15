@@ -14,6 +14,13 @@ import java.util.ArrayList;
 
 import tcdIO.Terminal;
 
+/*
+	Router class is used to create Router Objects. As soon as a Router Object is created, in order
+	to find out the Topology of the Network, it beings the process of pinging(). It stops pinging when the corresponding RoutingTable
+	is unchanged 20 times or more, by incoming routing tables. Then when a message is being sent, the sendMessage method must be called.
+	It decides which router to send to, based on the Routing Table.
+ */
+
 public class Router extends Node {
 
 	private ArrayList<Router> listOfRouters;
@@ -62,7 +69,7 @@ public class Router extends Node {
 				RoutingTable rt = new RoutingTable(packet);
 				terminal.println("Received Ping from: " + rt.getRouterName());
 				table.updateRoutingTable(rt);
-				if(RoutingTable.timesToBeUnchaged <= table.getTimesNotChanged()) {
+				if(RoutingTable.TIMES_TO_BE_UNCHANGED <= table.getTimesNotChanged()) {
 				}	else	{
 					ping();
 				}

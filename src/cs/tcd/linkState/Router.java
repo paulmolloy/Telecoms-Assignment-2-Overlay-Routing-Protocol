@@ -13,6 +13,14 @@ import java.util.ArrayList;
 import cs.tcd.distanceVector.Message;
 import tcdIO.Terminal;
 
+/*
+	Router class is used to create Router Objects. As soon as a Router Object is created, in order
+	to find out the Topology of the Network, it beings the process of pinging() it's Topology table, as well as the TopologyTables it receives as well.
+	It stops pinging when it has received a similar TopologyTable to the ones it has over 1000 times. This is the point at which all of the network has each of the Topology tables.
+	Then, ForwardingTables are constructed.
+	Then when a message is being sent, the sendMessage method must be called. It decides which router to send to, based on the ForwardingTable.
+ */
+
 public class Router extends Node {
 
 	private ArrayList<Router> listOfConnectedRouters;

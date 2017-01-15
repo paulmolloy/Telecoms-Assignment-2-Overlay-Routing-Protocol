@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class RoutingTable  {
 
-	public static int timesToBeUnchaged = 20;
+	public static int TIMES_TO_BE_UNCHANGED = 20;
 
 	private int timesTableUnchanged;
 	private String routerName;

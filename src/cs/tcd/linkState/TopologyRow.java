@@ -3,6 +3,10 @@ package cs.tcd.linkState;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/*
+
+ */
+
 public class TopologyRow implements Comparable<TopologyRow>, Serializable{
 
     private String router;
@@ -26,7 +30,6 @@ public class TopologyRow implements Comparable<TopologyRow>, Serializable{
             return -1;
         }
     }
-
 
 
     public String getRouter() {

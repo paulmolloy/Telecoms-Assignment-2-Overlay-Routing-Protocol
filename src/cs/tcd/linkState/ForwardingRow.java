@@ -3,6 +3,12 @@ package cs.tcd.linkState;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/*
+    Forwarding Row is used by ForwardingTable. It contains the users of the destination Router, the name of the destination Router,
+    the router before the destination router in order to achieve the shortest path to the destination Router, and finally the distance
+    from the source router i.e the router that created the Forwarding Table, and the destination router.
+ */
+
 public class ForwardingRow implements Serializable {
 
     private String routerDestination, routerIntermediate;
