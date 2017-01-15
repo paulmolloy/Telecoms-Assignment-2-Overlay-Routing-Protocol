@@ -1,11 +1,11 @@
 package cs.tcd.linkState;
 
+/*
+	Authors: Yasir Zardari, Paul Molloy, Sean McDonagh
+ */
 
 import java.util.*;
 
-/**
- * Created by root on 11/01/17.
- */
 public class ForwardingTable {
 
     private ArrayList<TopologyTable> tables;

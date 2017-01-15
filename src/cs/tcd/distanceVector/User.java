@@ -1,5 +1,9 @@
 package cs.tcd.distanceVector;
 
+/*
+	Authors: Yasir Zardari, Paul Molloy, Sean McDonagh
+ */
+
 import java.io.Serializable;
 
 /*

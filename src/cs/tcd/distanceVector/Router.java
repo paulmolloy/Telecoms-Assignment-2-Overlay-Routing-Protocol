@@ -1,5 +1,9 @@
 package cs.tcd.distanceVector;
 
+/*
+	Authors: Yasir Zardari, Paul Molloy, Sean McDonagh
+ */
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;

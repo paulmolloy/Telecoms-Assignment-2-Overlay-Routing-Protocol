@@ -1,5 +1,9 @@
 package cs.tcd.linkState;
 
+/*
+	Authors: Yasir Zardari, Paul Molloy, Sean McDonagh
+ */
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;

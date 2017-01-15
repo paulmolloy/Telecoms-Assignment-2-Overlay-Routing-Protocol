@@ -1,5 +1,10 @@
 package cs.tcd.distanceVector;
 
+/*
+	Authors: Yasir Zardari, Paul Molloy, Sean McDonagh
+ */
+
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

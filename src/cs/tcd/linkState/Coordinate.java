@@ -1,7 +1,7 @@
 package cs.tcd.linkState;
 
-/**
- * Created by root on 11/01/17.
+/*
+	Authors: Yasir Zardari, Paul Molloy, Sean McDonagh
  */
 
 /*

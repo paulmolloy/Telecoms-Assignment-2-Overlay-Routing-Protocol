@@ -1,13 +1,14 @@
 package cs.tcd.linkState;
 
+/*
+	Authors: Yasir Zardari, Paul Molloy, Sean McDonagh
+ */
+
 import java.io.*;
 import java.net.DatagramPacket;
 import java.util.ArrayList;
 
 
-/**
- * Created by root on 11/01/17.
- */
 public class TopologyTable {
 
     private ArrayList<TopologyRow> table;
