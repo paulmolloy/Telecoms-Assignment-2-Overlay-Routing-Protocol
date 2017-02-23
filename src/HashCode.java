@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.util.Scanner;
 
 public class HashCode {
+	
 
 	
 	public static void main(String[] args){
@@ -32,6 +33,8 @@ public class HashCode {
 				
 			}
 			
+
+			
 			Endpoint[] endpoints = new Endpoint[e]; 
 			for(int i=0;i< e;i++){
 				int l, k;
@@ -40,6 +43,8 @@ public class HashCode {
 					
 				}
 			}
+			
+
 
 //			while(in.hasNext()){
 //				
