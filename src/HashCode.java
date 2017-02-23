@@ -72,9 +72,9 @@ public class HashCode {
 		File file = new File("output.txt");
 		int numberOfCacheServers = 0;
 		for(int i = 0; i < cacheServers.length; i++){
-//			if(cacheServers[i].isUsed == true){
-//				numberOfCacheServers++;
-//			}
+			if(cacheServers[i].isCacheUsed() == true){
+				numberOfCacheServers++;
+			}
 		}
 		
 		file.createNewFile();
@@ -82,16 +82,16 @@ public class HashCode {
 		writer.write(numberOfCacheServers + "\n");
 		
 		for(int i = 0; i < cacheServers.length; i++){
-			//if(cacheServers[i].isUsed == true){
+			if(cacheServers[i].isCacheUsed() == true){
 				writer.write(cacheServers[i] + " ");
-//				for(int k = 0; k < cacheServers[i].vidID.length; k++){
-//					writer.write(cacheServers[i].vidID[i] + " ");
-//				}
+				for(int k = 0; k < cacheServers[i].vidID.size(); k++){
+					writer.write(cacheServers[i].vidID.get(i) + " ");
+				}
 				writer.write("\n");
 			}
 		}
 	
-	
+	}
 	
 	
 	
