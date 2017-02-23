@@ -3,10 +3,12 @@ import java.util.ArrayList;
 public class CacheServer {
 	ArrayList<ArrayList<Integer>> endPointIDs;
 	ArrayList<Integer> vidID;
+	int size;
 	
-	public CacheServer() {
+	public CacheServer(int size) {
 		endPointIDs = new ArrayList<ArrayList<Integer>>();
 		vidID = new ArrayList<Integer>();
+		this.size = size;
 	}
 	
 	public void setEndPoint(int endPointID, int latency) {
@@ -16,8 +18,13 @@ public class CacheServer {
 		endPointIDs.add(endPoint);
 	}
 	
-	public void addVidID(int vid) {
-		vidID.add(vid);
+	public void addVidID(Video vid) {
+		vidID.add(vid.getID());
+		this.size = this.size - vid.getSize();
+	}
+	
+	public int sizeLeft() {
+		return size;
 	}
 	
 	public Integer getLatency(int endPointLatency) {
