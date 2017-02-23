@@ -33,15 +33,14 @@ public class HashCode {
 			}
 			
 			Endpoint[] endpoints = new Endpoint[e]; 
-			for(int i=0;i< v;i++){
+			for(int i=0;i< e;i++){
 				int l, k;
-
-				//endpoints[i].setl(in.nextInt());
-				//endpoints[i].setk(in.nextInt());
+				endpoints[i] = new Endpoint(in.nextInt(), in.nextInt());
+				
 
 				
 			}
-			
+
 //			while(in.hasNext()){
 //				
 //				System.out.println(v + x);

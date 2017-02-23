@@ -20,7 +20,11 @@ public class Endpoint {
 	}
 	
 	
-	
+	public Endpoint(int l, int k){
+		this.l=l;
+		this.k=k;
+		
+	}
 	
 	
 
