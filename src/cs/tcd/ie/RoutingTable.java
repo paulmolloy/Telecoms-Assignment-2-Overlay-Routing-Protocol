@@ -32,7 +32,7 @@ public class RoutingTable  {
 	
 
 	
-	/*
+	/**
 	 * Update the Routing Table with a Message that is received.
 	 * Checks whether new distance is smaller than original. If so
 	 * then distance is updated with new distance taken from message which
@@ -58,7 +58,7 @@ public class RoutingTable  {
 		}
 	}
 	
-	/*
+	/**
 	 * Gets the router name of a specific user on the router.
 	 */
 	public String getRouterToSendTo(String user) {

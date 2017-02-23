@@ -38,14 +38,14 @@ public class Router extends Node{
 
 
 
-	/*
+	/**
 	 * Add the routers that are connected to this router in the network 
 	 */
 	public void addConnectedRouter(Router router) {
 		listOfRouters.add(router);
 	}
 
-	/*
+	/**
 	 * Recieves a Packet, and directs to the correct user
 	 */
 	@Override
@@ -55,21 +55,19 @@ public class Router extends Node{
 			case RoutingTable.ROUTING_TABLE_CODE:
 				//what happens when a RoutingTableDatagramPacket is received
 				RoutingTable table = new RoutingTable(packet);
+				//table.updateRoutingTable(table);
 				break;
 			case Message.MESSAGE_CODE:
 				//what happens when a MessageDatagramPacket is received
 				Message message = new Message(packet);
 				break;
 			default:
-				break;
-			
+				break;	
 		}
-			
-	
 	}
 
 	
-	/*
+	/**
 	 * Sends normal messages from router A to B.
 	 */
 	
@@ -84,7 +82,7 @@ public class Router extends Node{
 			}
 		}
 		
-		/*
+		/**
 		 * need to change the mesage to include the router that needs to receive the message as well!!!!!!!!!!!!!!
 		 */
 		InetSocketAddress dstAddress = new InetSocketAddress(DEFAULT_DST_NODE, routerToSendTo.getPort());
@@ -125,7 +123,7 @@ public class Router extends Node{
 		return -1;
 	}
 	
-	/*
+	/**
 	 * Sends the distance vectors of the routers from the routing table
 	 */
 	@Override
