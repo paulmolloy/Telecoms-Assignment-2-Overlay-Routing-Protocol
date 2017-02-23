@@ -3,6 +3,8 @@ public class Endpoint {
 	
 	private int l;
 	private int k;
+	int[] cacheIds;
+
 	
 	public int getl(){
 		return l;	

@@ -36,9 +36,9 @@ public class HashCode {
 			for(int i=0;i< e;i++){
 				int l, k;
 				endpoints[i] = new Endpoint(in.nextInt(), in.nextInt());
-				
-
-				
+				for(int j=0; i<endpoints[i].getk();j++){
+					
+				}
 			}
 
 //			while(in.hasNext()){
