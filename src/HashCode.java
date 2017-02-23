@@ -45,7 +45,13 @@ public class HashCode {
 			}
 			
 
-
+			int cEndpointId, cVideoId, cNumRequests;
+			for(int i=0;i< r;i++){
+				cNumRequests = in.nextInt();
+				cVideoId = in.nextInt();
+				cEndpointId = in.nextInt();
+				endpoints[cEndpointId].addVideoRequest(cVideoId, cNumRequests);
+			}
 //			while(in.hasNext()){
 //				
 //				System.out.println(v + x);
