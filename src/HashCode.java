@@ -33,6 +33,7 @@ public class HashCode {
 			int[] videos = new int[v];
 			for(int i=0;i< v;i++){
 				videos[i] = in.nextInt();
+				System.out.println(videos[i]);
 				
 			}
 			
@@ -42,10 +43,11 @@ public class HashCode {
 			for(int i=0;i< e;i++){
 				int l, k;
 				endpoints[i] = new Endpoint(in.nextInt(), in.nextInt());
-				for(int j=0; i<endpoints[i].getk();j++){
+				for(int j=0; j<endpoints[i].getk();j++){
 					
 				}
 			}
+			System.out.println("test");
 			
 
 			int cEndpointId, cVideoId, cNumRequests;
@@ -55,10 +57,15 @@ public class HashCode {
 				cEndpointId = in.nextInt();
 				endpoints[cEndpointId].addVideoRequest(cVideoId, cNumRequests);
 			}
+			
+			System.out.println(endpoints[0].videosPop.get(0));
+
+			
 //			while(in.hasNext()){
 //				
 //				System.out.println(v + x);
 //			}
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

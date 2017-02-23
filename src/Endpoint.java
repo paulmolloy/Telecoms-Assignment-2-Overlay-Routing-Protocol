@@ -36,7 +36,7 @@ public class Endpoint {
 			
 		}else{
 			videosPop.put((Integer)vidId, new Integer( numRequests));
-
+			
 		}
 		
 	}
