@@ -1,5 +1,8 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class HashCode {
@@ -70,4 +73,46 @@ public class HashCode {
 		
 		
 	}
+	
+	private static void outputFile(CacheServer cacheServers[]) throws IOException{
+			
+		File file = new File("output.txt");
+		int numberOfCacheServers = 0;
+		for(int i = 0; i < cacheServers.length; i++){
+//			if(cacheServers[i].isUsed == true){
+//				numberOfCacheServers++;
+//			}
+		}
+		
+		file.createNewFile();
+		FileWriter writer = new FileWriter(file); 
+		writer.write(numberOfCacheServers + "\n");
+		
+		for(int i = 0; i < cacheServers.length; i++){
+			//if(cacheServers[i].isUsed == true){
+				writer.write(cacheServers[i] + " ");
+//				for(int k = 0; k < cacheServers[i].vidID.length; k++){
+//					writer.write(cacheServers[i].vidID[i] + " ");
+//				}
+				writer.write("\n");
+			}
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

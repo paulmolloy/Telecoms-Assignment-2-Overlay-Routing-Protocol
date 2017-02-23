@@ -23,6 +23,14 @@ public class CacheServer {
 		this.size = this.size - vid.getSize();
 	}
 	
+	public boolean isSpace(int sizeOfVid) {
+		if(size - sizeOfVid >= 0) {
+			return true;
+		}	else	{
+			return false;
+		}
+	}
+	
 	public int sizeLeft() {
 		return size;
 	}
@@ -37,7 +45,7 @@ public class CacheServer {
 		return null;
 	}
 	
-	public boolean containsVid(int ID) {
+	public boolean containsVidID(int ID) {
 		if(vidID.contains(ID)) {
 			return true;
 		}	else	{
