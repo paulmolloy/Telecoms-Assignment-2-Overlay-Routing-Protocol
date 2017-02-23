@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class HashCode {
@@ -66,7 +67,7 @@ public class HashCode {
 		
 	}
 	
-	private static void outputFile(CacheServer cacheServers[]){
+	private static void outputFile(CacheServer cacheServers[]) throws IOException{
 			
 		File file = new File("output.txt");
 		int numberOfCacheServers = 0;
@@ -89,7 +90,7 @@ public class HashCode {
 				writer.write("\n");
 			}
 		}
-	}
+	
 	
 	
 	
